@@ -1,0 +1,164 @@
+package com.ordernao.utility;
+
+//make the class non-extendable by adding final
+public final class OrderNaoConstants {
+	// Hide the constructor
+	private OrderNaoConstants() {
+	}
+
+	// Constants :-
+	public static String EMPTY_PASSWORD = "";
+	// TODO admin id will be changed in near future (temparory we are using 1
+	// for every customer)
+	public static int ADMIN_ID = 1;
+
+	// Queries
+	public static String CHECK_EXISTING_CUSTOMER = "checkExistingCustomer";
+	public static final String GET_EXISTING_CUSTOMER_INFO = "getExistingCustomerInfo";
+	public static final String GET_NEW_CUSTOMER_INFO = "getNewCustomerInfo";
+	public static final String SET_NEW_CUSTOMER_DETAILS = "setNewCustomerDetails";
+	public static final String GET_CUSTOMER_ID_FROM_CONTACT_NUMER = "getCustomerIdFromContactNumber";
+	public static final String SAVE_NEW_ORDER_INFO_FOR_CUSTOMER_IN_ORDERDETAILS_TABLE = "saveOrderInfoOfCustomerInOrderDetails";
+	public static final String SAVE_NEW_ORDER_INFO_FOR_CUSTOMER_IN_ORDERS_TABLE = "saveNewOrderInfoForCustomerInOrdersTable";
+	public static final String FETCH_ORDERNUMBER_FROM_CUSTOMER_ID = "fetchOrderNumberFromCustomerId";
+	public static final String SAVE_NEW_EMPLOYEE = "saveNewEmployee";
+	public static final String CHECK_FOR_USERNAME = "checkForUsername";
+	public static final String SAVE_MULTIPLE_ORDERS = "saveMultipleOrders";
+	public static final String GET_ORDER_DETAILS_OF_CUSTOMER = "getOrderDetailsOfCustomer";
+	public static final String GET_DELIVERY_BOYS_LIST = "getDeliveryBoysList";
+	public static final String UPDATE_DELIVERY_BOYS = "updateDeliveryBoy";
+	public static final String GET_MORE_DETAILS_OF_ORDER = "fetchMoreDetailOfOrder";
+	public static final String FILTER_ORDER_BY_STATUS = "filterOrderByStatus";
+
+	public static final String COLUMN_NAME_USERID = "users.id";
+	public static final String COLUMN_NAME_USER_FIRSTNAME = "users.firstname";
+	public static final String COLUMN_NAME_USER_LASTNAME = "users.lastname";
+	public static final String COLUMN_NAME_USER_PHONE = "users.phone";
+	public static final String COLUMN_NAME_CUSTOMER_PHONE = "customer.phone";
+	public static final String COLUMN_NAME_ORDER_NUMBER = "orderdetails.orderno";
+	public static final String COLUMN_NAME_ORDER_DATE = "orders.date";
+	public static final String COLUMN_NAME_ORDER_STATUS = "orders.status";
+	public static final String COLUMN_NAME_PICKUP_POINT = "orderdetails.pickuppoint";
+	public static final String COLUMN_NAME_DELIVERY_POINT = "orderdetails.deliverypoint";
+	public static final String COLUMN_NAME_ITEM_NAME = "orderdetails.itemName";
+	public static final String COLUMN_NAME_TOTAL_DISTANCE = "orders.totalDistance";
+	public static final String COLUMN_NAME_TOTAL_AMOUNT = "orders.totalAmount";
+	public static final String COLUMN_NAME_CUSTOMER_FIRSTNAME = "customer.firstname";
+	public static final String COLUMN_NAME_CUSTOMER_LASTNAME = "customer.lastname";
+	public static final String COLUMN_NAME_CUSTOMER_ADDRESS = "customer.address";
+	public static final String COLUMN_NAME_ORDER_COMMENTS = "orders.comments";
+	public static final String COLUMN_NAME_ORDER_COMMENT_STATUS = "orders.commentstatus";
+	public static final int CUSTOMER_EXIST = 0;
+	public static final int INVALID_EMPLOYEE_TYPE = -1;
+	public static final String MANAGER = "manager";
+	public static final String CALL_OPERATOR = "callOperator";
+	public static final String DELIVERY_BOY = "deliveryBoys";
+	public static final int ADMIN_TYPE=1;
+	public static final int MANAGER_TYPE = 2;
+	public static final int CALL_OPERATOR_TYPE = 3;
+	public static final int DELIVERY_BOY_TYPE = 4;
+	public static final int MAX_MOBILE_NUMBER_LENGTH = 10;
+	public static final String RETURN_STATUS_INCORRECT_MOBILE_NUMBER = "incorrectPhoneNumber";
+	public static final String SESSION_ATTRIBUTE_CONTACT_NUMBER = "contactNumber";
+	public static final String SESSION_ATTRIBUTE_ORDERBEAN = "order";
+	public static final String SESSION_ATTRIBUTE_NEW_CUSTOMER = "newCustomer";
+	public static final String STRING_TRUE = "TRUE";
+	public static final String STRING_FALSE = "FALSE";
+	public static final String RETURN_STATUS_SUCCESS = "success";
+	public static final String RETURN_STATUS_ERROR = "error";
+	public static final String PATH_SAVE_CONTACT_NUMBER = "/save-contact-number";
+	public static final String PATH_SAVE_NEW_CUSTOMER = "/save-new-customer-and-order";
+	public static final String REQUEST_PARAM_CONTACT_NUMBER = "contactNumber";
+	public static final String MODAL_ATTRIBUTE_ORDERBEAN = "order";
+	public static final String RETURN_STATUS_EMPTY_FIRSTNAME = "emptyFirstName";
+	public static final String RETURN_STATUS_EMPTY_LASTNAME = "emptyLastName";
+	public static final String RETURN_STATUS_INVALID_CONTACT_NUMBER = "invalidContactNumber";
+	public static final String RETURN_STATUS_EMPTY_ITEM = "emptyItem";
+	public static final String RETURN_STATUS_EMPTY_PICKUP_LOCATION = "emptyPickupLocation";
+	public static final String RETURN_STATUS_EMPTY_DELIVERY_LOCATION = "emptyDeliveryLocation";
+	public static final String RETURN_STATUS_INCORRECT_DISTANCE = "incorrectDistance";
+	public static final String RETURN_STATUS_INCORRECT_SERVICE_CHARGE = "incorrectServiceCharge";
+	public static final String PATH_SAVE_NEW_ORDER_FOR_EXISTING_CUSTOMER = "/saveNewOrderForExistingCustomer";
+	public static final String RETURN_STATUS_FAIL = "fail";
+	public static final String PATH_ADD_EMPLOYEE = "/addEmployee";
+	public static final String MODAL_ATTRIBUTE_EMPLOYEE_BEAN = "employeeBean";
+	public static final String RETURN_STATUS_EMPTY_USERNAME = "emptyUsername";
+	public static final String RETURN_STATUS_EMPTY_PASSWORD = "emptyPassword";
+	public static final String RETURN_STATUS_EMPTY_CONFIRM_PASSWORD = "emptyConfirmPassword";
+	public static final String RETURN_STATUS_PASSWORD_DOESNOT_MATCH = "passwordsDontMatch";
+	public static final String RETURN_STATUS_USERNAME_NOT_AVAILABLE = "userNameNotAvailable";
+	public static final String PATH_MORE_DETAILS_OF_ORDER = "/more-detail-of-order";
+	public static final String REQUEST_PARAM_ORDERNUMBER = "orderNumber";
+	public static final String RETURN_STATUS_MORE_DETAILS_OF_ORDER = "moreDetailsOfOrder";
+	public static final String MODAL_ATTRIBUTE_MORE_DETAIL_OF_ORDER = "moreOrderDetails";
+	public static final String PATH_ASSIGN_ORDER_TO_DELIVERY_BOY = "/assign-order-to-delivery-boy";
+	public static final String REQUEST_PARAM_DELIVERY_BOYID = "deliveryBoyId";
+	public static final String PATH_FILTER_ORDER_BY_STATUS = "/filter-orders-by-status";
+	public static final String REQUEST_PARAM_STATUS = "status";
+	public static final String MODAL_ATTRIBUTE_TRACK_ORDER_BEAN = "trackOrderBean";
+	public static final String MODAL_ATTRIBUTE_DELIVERY_BOYS_BEAN = "deliveryBoysBean";
+	public static final String PATH_FRAGMENTS_TRACK_DELIVERY_TABLE = "fragments/trackDeliveryTable";
+	public static final String PATH_FILTER_ORDER_BY_DATE = "/filter-orders-by-date";
+	public static final String REQUEST_PARAM_DATE = "date";
+	public static final String PATH_FILTER_ORDER_BY_ASSIGNMENT = "/filter-orders-by-assignment";
+	public static final String REQUEST_PARAM_ASSIGNMENT = "assignment";
+	public static final String REQUEST_PARAM_SEARCH_KEY = "searchKey";
+	public static final String PATH_TRACK_DELIVERY_SEARCH = "/track-delivery-search";
+	public static final String PATH_TRACK_DELIVERY_PAGE = "trackdelivery";
+	public static final String PATH_TRACK_DELIVERY_HTML_PAGE = "/trackdelivery.html";
+	public static final String PATH_SUMMARY_PAGE = "summary";
+	public static final String PATH_SUMMARY_HTML_PAGE = "/summary.html";
+	public static final String PATH_MORE_ORDER_DETAILS_PAGE = "moreDetailsOfOrder";
+	public static final String PATH_MORE_ORDER_DETAILS_HTML_PAGE = "/moreDetailsOfOrder.html";
+	public static final String PATH_TRACK_DELIVERY_TABLE_PAGE = "trackDeliveryTable";
+	public static final String PATH_TRACK_DELIVERY_TABLE_HTML_PAGE = "fragments/trackDeliveryTable";
+	public static final String DEFAULT_ORDER_STATUS_PENDING = "Pending";
+	public static final String ORDER_STATUS_PENDING = "Pending";
+	public static final String ORDER_STATUS_DELIVERED = "Delivered";
+	public static final String ORDER_STATUS_FAILED = "Failed";
+	public static final String SESSION_ATTRIBUTE_FILTER_ORDER_STATUS = "orderStatus";
+	public static final String SESSION_ATTRIBUTE_FILTER_ORDER_TIME = "orderTime";
+	public static final String SESSION_ATTRIBUTE_FILTER_ORDER_ASSIGNMENT = "orderAssignment";
+	public static final String COMMENT_STATUS_FAILED = "Failed ";
+	public static final String PATH_COMMENTS_OF_FAILED_STATUS = "/comments-of-failed-order";
+	public static final String GET_COMMENTS_DETAILS_OF_FAILED_ORDER = "getCommentsOfFailedOrder";
+	public static final String COLUMN_NAME_ORDER_COUNT = "orderCount";
+	public static final String COLUMN_NAME_PRODUCT_CHARGE = "productCharge";
+	public static final String COLUMN_NAME_SERVICE_CHARGE = "serviceCharge";
+	public static final String CHECK_FAILED_STATUS = "checkFailedOrder";
+	public static final String PATH_FRAGMENTS_FAILED_ORDER_DETAILS = "fragments/failedOrderDetails";
+	public static final String PATH_SUSPICIOUS_ACTIVITY = "suspiciousActivity";
+	public static final String PATH_ORDER_STATUS_MODAL = "/order-status-modal";
+	public static final String CHECK_FOR_PENDING_OR_DELIVERED_ORDER = "checkForPendingOrDeliveredOrder";
+	public static final String SESSION_ATTRIBUTE_ORDER_NUMBER = "orderNum";
+	public static final String PATH_SAVE_FAILED_STATUS_COMMENT = "/save-failed-status-comments-of-order";
+	public static final String SAVE_FAILED_COMMENTS_STATUS = "saveFailedOrderComments";
+	public static final String PATH_ERROR_MODAL_PAGE = "ErrorModal";
+	public static final String PATH_PENDING_OR_FAILED_MODAL = "/pending-or-delivered-order-modal";
+	public static final String PATH_SAVE_PENDING_OR_DELIVERED_ORDER_STATUS = "/save-pending-or-delivered-status-of-order";
+	public static final String REQUEST_PARAM_NEW_STATUS_OF_ORDER = "newOrderStatus";
+	public static final String SESSION_ATTRIBUTE_NEW_ORDER_STATUS = "newStatusOfOrder";
+	public static final String SAVE_PENDING_OR_FAILED_ORDER_STATUS = "savePendingOrFailedOrderStatus";
+	public static final String CHECK_DELIVERY_BOY_ID_IN_DB = "checkDeliveryBoyIdInDB";
+	public static final String MODAL_ATTRIBUTE_ERROR_MESSAGE = "ErrorMessage";
+	public static final Object ERROR_MSG_HEADER = "Error";
+	public static final Object ERROR_MSG = "Error occured during operation,try again";
+	public static final Object SUSPICIOUS_ACTIVITY_MSG_HEADER = "Warning";
+	public static final Object SUSPICIOUS_ACTIVITY_MSG = "Suspicious Activity Detected";
+	public static final String MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER = "ErrorMsgHeader";
+	public static final String ORDER_DATE_TODAY = "Today";
+	public static final String ORDER_DATE_THIS_MONTH = "Month";
+	public static final String ORDER_DATE_LAST_SEVEN_DAYS = "LastSevenDays";
+	public static final String ORDER_DATE_TILL_DATE = "TillDate";
+	public static final String MYSQL_DATE_TODAY = "DATE(orders.date) =  NOW() ";
+	public static final String MYSQL_DATE_TILL_DATE = " DATE(orders.date) <=NOW() ";
+	public static final String MYSQL_DATE_THIS_MONTH = " DATE(orders.date) >= NOW() - INTERVAL 30 DAY AND DATE(orders.date) < NOW() ";
+	public static final String MYSQL_DATE_LAST_SEVEN_DAYS = " DATE(orders.date) >= NOW() - INTERVAL 7 DAY AND DATE(orders.date) < NOW() ";
+	public static final String ORDER_ASSIGNED = "Assigned";
+	public static final String ORDER_UNASSIGNED = "Unassigned";
+	public static final String MYSQL_DELIVERY_BOY_ID_NOT_NULL = " orders.DeliveryPersonId IS NOT NULL ";
+	public static final String MYSQL_DELIVERY_BOY_ID_NULL = " orders.DeliveryPersonId IS NULL ";
+	public static final String MYSQL_AND = " AND ";
+	public static final String ADMIN = "ADMIN";
+
+}
