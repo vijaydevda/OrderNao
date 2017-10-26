@@ -4,14 +4,14 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
+<title>Call Nao</title>
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"
 	integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
 	crossorigin="anonymous"></script>
+<script type="text/javascript" src="/js/ordernow.js"></script>
 <script type="text/javascript"
 	src="//maps.googleapis.com/maps/api/js?key=AIzaSyBvNF2rX9Rt6NLl2PfZaiD0a0V47Xv5bVc"></script>
-<!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script> -->
 
-<title>Call Nao</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
 	integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
@@ -22,9 +22,11 @@
 <link rel="stylesheet" type="text/css" href="/css/order.css">
 <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700"
 	rel="stylesheet">
+<script type="text/javascript"
+	src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 <script type="text/javascript" src="/js/map.js"></script>
 <script type="text/javascript" src="/js/distancecal.js"></script>
-<script type="text/javascript" src="/js/ordernow.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -47,19 +49,18 @@
 				<div class="row">
 					<div class="col-md-6">
 						<span style="display: inline-block;">
-						<h5>Name:</h5></span> <span
-							style="display: inline-block;" id="customerFirstName"
-							th:text="${session.order.customerFirstName}"> 
-						</span>
-						<span
+							<h5>Name:</h5>
+						</span> <span style="display: inline-block;" id="customerFirstName"
+							th:text="${session.order.customerFirstName}"> </span> <span
 							style="display: inline-block;" id="customerLasttName"
-							th:text="${session.order.customerLastName}">
-						</span>
+							th:text="${session.order.customerLastName}"> </span>
 					</div>
 					<div class="col-md-6">
 						<span style="display: inline-block;"><h5>mobile:</h5></span> +91-<span
-							id="style="display: inline-block;"
-							th:text="${session.order.customerPhone}"> -</span>
+							id="style=" display:
+							inline-block;"
+							th:text="${session.order.customerPhone}">
+							-</span>
 					</div>
 				</div>
 				<br>
@@ -88,9 +89,9 @@
 								&#8377 </b>:</span> <span th:text="${session.order.totalAmount}"> </span>
 					</div>
 					<div class="col-md-4">
-						<span style="display: inline-block;"><b>comment</b>:</span> 
-						<span th:text="${session.order.commentStatus}"></span>
-						<span th:text="${session.order.comments}"></span>
+						<span style="display: inline-block;"><b>comment</b>:</span> <span
+							th:text="${session.order.commentStatus}"></span> <span
+							th:text="${session.order.comments}"></span>
 					</div>
 				</div>
 			</div> <!-- If customer is existing -->
@@ -120,22 +121,26 @@
 
 	<div class="card  text-center rounded card-body">
 		<div id="panel">
-			<span th:if="${session.newCustomer} == 'FALSE'">
-				<input type="hidden" id="newCustomer" value="FALSE"/>
-				<form>
+			<span th:if="${session.newCustomer} == 'FALSE'"> <input
+				type="hidden" id="newCustomer" value="FALSE" />
+				<div id="locationDiv">
+
 					<label for="orderPickedFrom">Pick Up Address: </label> <input
 						id="origin" placeholder="order pick up address" type="text"
-						name="orderPickedFrom"><br> <label
-						for="orderDeliveredAt">Delivery Address: </label> <input
-						id="destination" placeholder="order delivery address" type="text"
-						name="orderDeliveredAt"><br> <label for="neworder">Order:
-					</label> <input class="align" id="itemName" type="text"
-						placeholder="order name" name="itemName"><br> <input type="button"
-						value="Update" onclick="calcRoute(),dist();">
-				</form>
-			</span> <span th:if="${session.newCustomer} == 'TRUE'">
-				<input type="hidden" id="newCustomer" value="TRUE"/>
-				<form>
+						name="orderPickedFrom"> <label for="orderDeliveredAt">Delivery
+						Address: </label> <input id="destination"
+						placeholder="order delivery address" type="text"
+						name="orderDeliveredAt"> <label for="neworder">Order:</label><input
+						class="align" id="itemName" type="text" placeholder="order name"
+						name="itemName">
+					<button type="button" id="addMore">Add More</button>
+					<br>
+				</div> <input type="button" value="Update" onclick="calcRoute(),dist();">
+
+			</span> <span th:if="${session.newCustomer} == 'TRUE'"> <input
+				type="hidden" id="newCustomer" value="TRUE" />
+				<div id="locationDiv">
+
 					<label for="customerFirstName">Customer First Name: </label> <input
 						id="customerFirstName" placeholder="Customer first name"
 						type="text" name="customerFirstName"><br> <label
@@ -147,14 +152,16 @@
 						name="customerAddress"><br> <label
 						for="orderPickedFrom">Pick Up Address: </label> <input id="origin"
 						placeholder="order pick up address" type="text"
-						name="orderPickedFrom"><br> <label
-						for="orderDeliveredAt">Delivery Address: </label> <input
-						id="destination" placeholder="order delivery address" type="text"
-						name="orderDeliveredAt"><br> <label for="neworder">Order:
-					</label> <input class="align" id="itemName" type="text"
-						placeholder="order name" name="itemName"><br> <input
-						type="button" value="Update" onclick="calcRoute(),dist();">
-				</form>
+						name="orderPickedFrom"> <label for="orderDeliveredAt">Delivery
+						Address: </label> <input id="destination"
+						placeholder="order delivery address" type="text"
+						name="orderDeliveredAt"> <label for="neworder">Order:</label><input
+						class="align" id="itemName" type="text" placeholder="order name"
+						name="itemName">
+					<button type="button" id="addMore">Add More</button>
+					<br>
+
+				</div> <input type="button" value="Update" onclick="calcRoute(),dist();">
 			</span>
 		</div>
 		<div id="costing"></div>
@@ -163,14 +170,16 @@
 			<!-- <a class="btn btn-success" id="placeorder"> href="trackdelivery.html"
 				place order
 			</a> -->
-			<button class="btn btn-success" id="placeorder" onclick="placeOrder();">place order</button>
+			<button class="btn btn-success" id="placeorder"
+				onclick="placeOrder();">place order</button>
 			<button class="btn btn-danger" id="cancelorder">cancel</button>
 		</div>
-		<div class="form-group" style="display:none"id="commentBox">
-  			<label for="comment">Comment:</label>
-  			<textarea class="form-control" rows="5" id="commentContent"></textarea>
-  			<button type="button" class="btn btn-success" id="submitComments" onclick="placeOrder();">Submit</button>
-  	</div>
+		<div class="form-group" style="display: none" id="commentBox">
+			<label for="comment">Comment:</label>
+			<textarea class="form-control" rows="5" id="commentContent"></textarea>
+			<button type="button" class="btn btn-success" id="submitComments"
+				onclick="placeOrder();">Submit</button>
+		</div>
 	</div>
 
 	<div id="map-canvas"></div>

@@ -138,7 +138,7 @@ public final class OrderNaoConstants {
 	public static final String PATH_SAVE_PENDING_OR_DELIVERED_ORDER_STATUS = "/save-pending-or-delivered-status-of-order";
 	public static final String REQUEST_PARAM_NEW_STATUS_OF_ORDER = "newOrderStatus";
 	public static final String SESSION_ATTRIBUTE_NEW_ORDER_STATUS = "newStatusOfOrder";
-	public static final String SAVE_PENDING_OR_FAILED_ORDER_STATUS = "savePendingOrFailedOrderStatus";
+	public static final String SAVE_PENDING_OR_DELIVERED_ORDER_STATUS = "savePendingOrDeliveredOrderStatus";
 	public static final String CHECK_DELIVERY_BOY_ID_IN_DB = "checkDeliveryBoyIdInDB";
 	public static final String MODAL_ATTRIBUTE_ERROR_MESSAGE = "ErrorMessage";
 	public static final Object ERROR_MSG_HEADER = "Error";
@@ -160,5 +160,9 @@ public final class OrderNaoConstants {
 	public static final String MYSQL_DELIVERY_BOY_ID_NULL = " orders.DeliveryPersonId IS NULL ";
 	public static final String MYSQL_AND = " AND ";
 	public static final String ADMIN = "ADMIN";
+	public static final String PATH_FILTER_TRACK_ORDER = "/filter-track-order";
+	public static final String RETURN_STATUS_SUSPICIOUS_ACTIVITY = "suspiciousActivity";
+	public static final String REQUEST_PARAM_NEW_STATUS = "newStatus";
+	public static final String REQUEST_PARAM_FAILED_STATUS_COMMENTS = "failedComments";
 
 }

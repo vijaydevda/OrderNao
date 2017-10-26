@@ -8,6 +8,15 @@ public class EmployeeBean {
 	private String email;
 	private String employeeType;
 	private String userName;
+	private String contactNumber;
+
+	public String getContactNumber() {
+		return contactNumber;
+	}
+
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
+	}
 
 	public String getUserName() {
 		return userName;
