@@ -37,11 +37,17 @@ function calculateDistance(origin, destination) {
         var distance_value = distance.value;
         var distance_text = distance.text;
         var miles = distance_text.substring(0, distance_text.length - 3);
+        //here is our calculation 
+        //first we have to findout number of pickup and delivery 
+        //second after finding the number of pickup  we will add 50 in the total amount calculated in the amount
         km = miles *1.60934;
         if(km<=5){
           amount =50;
+          // var total amount = amount +(total pickup -1)*50
         }else{
          amount= km*10;
+          // var total amount = amount +(total pickup -1)*50
+
         }
         $('#result').html("It is " + km + " Kilometers from " + origin + " to " + destination+ " total amount =" +amount);
         $('#costing').html( "Total Distance :" + km +"K.M "+" Total cost :"+amount+ "rs");
