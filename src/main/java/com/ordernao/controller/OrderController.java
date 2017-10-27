@@ -430,7 +430,7 @@ public class OrderController {
 	 * OrderNaoConstants.SUSPICIOUS_ACTIVITY_MSG); return
 	 * OrderNaoConstants.PATH_SUSPICIOUS_ACTIVITY; } }
 	 */
-	@RequestMapping(value = OrderNaoConstants.PATH_TRACK_DELIVERY_SEARCH)
+	@RequestMapping(value = OrderNaoConstants.PATH_TRACK_DELIVERY_SEARCH,method=RequestMethod.POST)
 	public String searchTrackDelivery(@RequestParam(OrderNaoConstants.REQUEST_PARAM_SEARCH_KEY) String searchKey,
 			Model model, HttpSession session) {
 		logger.info("Entry at searchTrackDelivery(Controller) search key:- " + searchKey);

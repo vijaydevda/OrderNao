@@ -1,9 +1,12 @@
+// this variable is used as counter when there is more than one pickup or delivery points are used
 var addMoreButtonCounter = 1;
 
 // these two variables are used to reset value of dropdown when operation is
 // cancelled
 var currentElementId = -1;
 var oldStatus;
+// these variables are used to temporary store orderNumber and status when
+// current status is changed
 var tempOrderNumberForStatusChange;
 var tempStatusForStatusChange;
 $(document)
@@ -161,11 +164,23 @@ $(document)
 										console.log("AddMore:- ");
 										console.log("counter :- "
 												+ addMoreButtonCounter);
+										// here we are checking for number of
+										// pickup/delivery points
+										// if they are less than 5 then only we
+										// increase counter because
+										// we are providing total 5 counters(1
+										// is by default + this 4=5)
 										if (addMoreButtonCounter < 5) {
 											addMoreButtonCounter++;
 											console.log("counter :- "
 													+ addMoreButtonCounter);
+											// here we are removing remove
+											// button because we will display
+											// only one remove button
 											$("#removeButton123").remove();
+											// here we are creating label &
+											// input box for pickup
+											// point,delivery point & itemname
 											var label = $("<label>")
 													.attr(
 															{
@@ -224,6 +239,10 @@ $(document)
 												'type' : "button",
 												'id' : 'removeButton123'
 											}).text('Remove');
+
+											// here we are adding all the three
+											// label and input box & itemname to
+											// UI
 											input.appendTo(label);
 											input2.appendTo(label2);
 											input3.appendTo(label3);
@@ -234,6 +253,7 @@ $(document)
 										}
 									});
 
+					// this function is called when the remove button is clicked
 					$('#locationDiv').on(
 							'click',
 							'#removeButton123',
@@ -241,6 +261,10 @@ $(document)
 								console.log("RemoveButton :-");
 								console.log("counter :- "
 										+ addMoreButtonCounter);
+								// here we are checking for counter if it is
+								// less than 6 i.e 5 so we remove
+								// all the three label & input boxes & itemname
+								// from UI
 								if (addMoreButtonCounter < 6) {
 									$("#originLabel" + addMoreButtonCounter)
 											.remove();
@@ -257,7 +281,13 @@ $(document)
 									$("#itemName" + addMoreButtonCounter)
 											.remove();
 									$(this).remove();
+									// as we remove one entry of
+									// pickup/delivery/itemname we also decrease
+									// addMoreButtonCounter to -1
 									addMoreButtonCounter--;
+									// here we are appending remove button on UI
+									// only if pickup/delivery/item name is
+									// greater than 1
 									if (addMoreButtonCounter > 1) {
 										var button = $("<button>").attr({
 											'type' : "button",
@@ -327,10 +357,11 @@ $(document)
 											// filters
 											$('#byStatus').val("By Status");
 											$('#byTime').val("By Time");
-											$('#byAssignment').val("By Assignment");
+											$('#byAssignment').val(
+													"By Assignment");
 											$("#trackOrderTable").load(
-													"/track-delivery-search?searchKey="
-															+ searchKey,
+													"/track-delivery-search",{"searchKey":searchKey}
+															,
 													function() {
 														// alert("Search
 														// Success...");
@@ -543,15 +574,21 @@ function moreDetails(orderNumber) {
 			});
 }
 
+// this function is called when placeorder button is clicked
 function placeOrder() {
 	console.log("placeorder");
 	var newCustomer = $("#newCustomer").val();
 	console.log("New Customer :- " + newCustomer);
+	// here we are checking for new customer
 	if (newCustomer == "TRUE") {
+
+		// if customer is new the we will store it's details
 		var comments = $("#commentContent").val();
 		var customerFirstName = $("#customerFirstName").val();
 		var customerLastName = $("#customerLastName").val();
 		var customerAddress = $("#customerAddress").val();
+		// here we are using array to store item name,pickup & delivery
+		// because we are dealing with multiple pickup's & delivery's point
 		var itemName = [];
 		itemName[0] = $("#itemName").val() + "&#@";
 		var orderPickedFrom = [];
@@ -561,10 +598,22 @@ function placeOrder() {
 		console.log("itemName[0] " + itemName[0] + " orderPickedFrom [0] "
 				+ orderPickedFrom[0] + " orderDeliveredAt [0] "
 				+ orderDeliveredAt[0]);
+
 		var orderLength = addMoreButtonCounter;
+
 		console.log("orderLength" + orderLength);
+		// this for loop is used for multiple pickup/delivery points
+		// here we are storing multiple pickup's & delivery's point by
+		// seperating them by "&#@" pattern
+		// we will use thing pattern to fetch these points at server side while
+		// storing in DB
 		if (orderLength > 1) {
 			for (var i = 1; i < orderLength; i++) {
+				// here we start for loop from 1 because by default we have one
+				// pickup/delivery
+				// here we are fetching value of itemname,orgin,destination by
+				// using their id
+				// starting from 2 to 5
 				itemName[i] = $("#itemName" + (i + 1)).val() + "&#@";
 				orderPickedFrom[i] = $("#origin" + (i + 1)).val() + "&#@";
 				orderDeliveredAt[i] = $("#destination" + (i + 1)).val() + "&#@";
@@ -577,6 +626,9 @@ function placeOrder() {
 		}
 		var totalDistance = parseInt(km);
 		var serviceCharge = parseFloat(amount);
+		// here we are converting all the itemnames/delivery,pickup points to
+		// String
+		// because we need to send it using ajax request
 		var itemNameString = JSON.stringify(itemName);
 		var orderPickedFromString = JSON.stringify(orderPickedFrom);
 		var orderDeliveredAtString = JSON.stringify(orderDeliveredAt);
@@ -637,6 +689,8 @@ function placeOrder() {
 		}
 
 	} else if (newCustomer == "FALSE") {
+
+		// if customer is existing then we will not store it's details
 		var comments = $("#commentContent").val();
 		var itemName = [];
 		itemName[0] = $("#itemName").val() + "&#@";
