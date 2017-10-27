@@ -323,6 +323,11 @@ $(document)
 										} else {
 											console.log("searchKey "
 													+ searchKey);
+											// here we set empty value in
+											// filters
+											$('#byStatus').val("By Status");
+											$('#byTime').val("By Time");
+											$('#byAssignment').val("By Assignment");
 											$("#trackOrderTable").load(
 													"/track-delivery-search?searchKey="
 															+ searchKey,
@@ -335,7 +340,21 @@ $(document)
 
 				});
 
+$(document).keyup(
+		function(e) {
+			if (e.keyCode == 27) {
+				console.log("Escape Key Pressed : OldStatus :- " + oldStatus
+						+ " currentElementId :- " + currentElementId);
+				var myexp = '#' + currentElementId + ' option[value="'
+						+ oldStatus + '"]';
+				console.log(myexp);
+				$(myexp).prop('selected', true);
+			}
+		});
+
 function filterTrackOrder() {
+	// Here we set empty value for search key
+	$("#trackDeliverySearchKey").val("");
 	var status = $('#byStatus').val();
 	var date = $('#byTime').val();
 	var assignment = $('#byAssignment').val();
@@ -396,6 +415,7 @@ function savefailedOrderStatus() {
 			"newStatus" : tempStatusForStatusChange,
 			"failedComments" : failedComments
 		}, function() {
+			$("#failedStatusComments").val("");
 			$('#SuspiciousActivityModal').modal({
 				backdrop : 'static',
 				keyboard : true,
@@ -473,20 +493,26 @@ function failedOrderStatus(orderNumber) {
 }
 
 function assignDeliveryBoyFunc(orderNumber, deliveryBoyId) {
+	var status = $('#byStatus').val();
+	var date = $('#byTime').val();
+	var assignment = $('#byAssignment').val();
+	console.log("status :- " + status + " date :- " + date + " assignment :- "
+			+ assignment);
 	var deliveryBoyId = $(deliveryBoyId).val();
 	console.log("assignDeliveryBoyFunc() Order Number :- " + orderNumber
 			+ " Delivery Body Id :- " + deliveryBoyId);
 	$("#trackOrderTable").load("/assign-order-to-delivery-boy", {
+		"status" : status,
+		"date" : date,
+		"assignment" : assignment,
 		"orderNumber" : orderNumber,
 		"deliveryBoyId" : deliveryBoyId
 	}, function(response, status, xhr) {
-		if (status == "success") {
-			$("#suspiciousActivity").modal({
-				backdrop : 'static',
-				keyboard : false,
-				show : true
-			});
-		}
+		$("#suspiciousActivity").modal({
+			backdrop : 'static',
+			keyboard : false,
+			show : true
+		});
 	});
 
 }

@@ -231,32 +231,29 @@ public class OrderController {
 		return OrderNaoConstants.RETURN_STATUS_MORE_DETAILS_OF_ORDER;
 	}
 
+	// This method is used to assign order to delivery boy
 	@RequestMapping(value = OrderNaoConstants.PATH_ASSIGN_ORDER_TO_DELIVERY_BOY, method = RequestMethod.POST)
-	public String assignOrderToDeliveryBoy(
+	public String assignOrderToDeliveryBoy(@RequestParam(OrderNaoConstants.REQUEST_PARAM_STATUS) String status,
+			@RequestParam(OrderNaoConstants.REQUEST_PARAM_DATE) String date,
+			@RequestParam(OrderNaoConstants.REQUEST_PARAM_ASSIGNMENT) String assignment,
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_DELIVERY_BOYID) int deliveryBoyId,
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_ORDERNUMBER) int orderNumber, Model model) {
 		logger.info("Entry at assignOrderToDeliveryBoy(Controller) Deliveryboyid :- " + deliveryBoyId);
-		boolean deliveryBoyStatus = service.checkDeliveryBoyIdInDB(deliveryBoyId);
-		if (deliveryBoyStatus) {
-			boolean status = service.assignOrderToDeliveryBoy(deliveryBoyId, orderNumber);
-			if (status) {
-				List<OrderBean> orderBeanList = service.getOrderDetailsOfCustomer();
-				List<OrderBean> deliveryBoysList = service.getDeliveryBoysList();
-				model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TRACK_ORDER_BEAN, orderBeanList);
-				model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_DELIVERY_BOYS_BEAN, deliveryBoysList);
-				logger.info("Exit at assignOrderToDeliveryBoy(Controller) Deliveryboyid :- " + deliveryBoyId);
-				logger.info("trackDeliveryTable(Controller)");
-				return OrderNaoConstants.PATH_FRAGMENTS_TRACK_DELIVERY_TABLE;
-			} else {
-				logger.info("Error(Controller)");
-				model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER,
-						OrderNaoConstants.SUSPICIOUS_ACTIVITY_MSG_HEADER);
-				model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE,
-						OrderNaoConstants.SUSPICIOUS_ACTIVITY_MSG);
-				return OrderNaoConstants.PATH_SUSPICIOUS_ACTIVITY;
-			}
+		logger.info("status :- " + status + " date :- " + date + " assignment :- " + assignment);
+
+		String returnMessage = service.deliveryBoyOrderAssignment(deliveryBoyId, orderNumber);
+		if (returnMessage.equalsIgnoreCase(OrderNaoConstants.RETURN_STATUS_SUCCESS)) {
+			logger.info("Exit at assignOrderToDeliveryBoy(Controller) ");
+			logger.info("Redirecting Request (Controller)");
+			return "redirect:/filter-track-order?status=" + status + "&date=" + date + "&assignment=" + assignment;
+		} else if (returnMessage.equalsIgnoreCase(OrderNaoConstants.RETURN_STATUS_ERROR)) {
+			logger.info("Error(Controller)");
+			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER,
+					OrderNaoConstants.ERROR_MSG_HEADER);
+			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE, OrderNaoConstants.ERROR_MSG);
+			return OrderNaoConstants.PATH_SUSPICIOUS_ACTIVITY;
 		} else {
-			logger.info("Suspicious Activity found.");
+			logger.info("Suspicious Activity found(Controller)");
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER,
 					OrderNaoConstants.SUSPICIOUS_ACTIVITY_MSG_HEADER);
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE,
@@ -267,8 +264,10 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = OrderNaoConstants.PATH_TRACK_DELIVERY_HTML_PAGE)
-	public String trackDelivery(HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String trackDelivery(HttpServletRequest request, HttpServletResponse response, Model model,
+			HttpSession session) {
 		logger.info("Entry at trackDelivery(Controller)");
+		session.removeAttribute(OrderNaoConstants.SESSION_ATTRIBUTE_SEARCH_KEY);
 		List<OrderBean> orderBeanList = service.getOrderDetailsOfCustomer();
 		List<OrderBean> deliveryBoysList = service.getDeliveryBoysList();
 		model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TRACK_ORDER_BEAN, orderBeanList);
@@ -281,10 +280,18 @@ public class OrderController {
 	@RequestMapping(value = OrderNaoConstants.PATH_FILTER_TRACK_ORDER)
 	public String filterTrackOrder(@RequestParam(OrderNaoConstants.REQUEST_PARAM_STATUS) String status,
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_DATE) String date,
-			@RequestParam(OrderNaoConstants.REQUEST_PARAM_ASSIGNMENT) String assignment, Model model) {
+			@RequestParam(OrderNaoConstants.REQUEST_PARAM_ASSIGNMENT) String assignment, Model model,
+			HttpSession session) {
 		logger.info("Entry at filterTrackOrder(Controller) ");
 		logger.info("Status :- " + status + " Date :- " + date + " Assignment :- " + assignment);
-		List<OrderBean> filterOrderList = service.filterTrackOrder(status, date, assignment);
+		// this is used for search if search is not null it means the last
+		// request is of search
+		// else it is other request
+		String searchKey = null;
+		if (session.getAttribute(OrderNaoConstants.SESSION_ATTRIBUTE_SEARCH_KEY) != null) {
+			searchKey = (String) session.getAttribute(OrderNaoConstants.SESSION_ATTRIBUTE_SEARCH_KEY);
+		}
+		List<OrderBean> filterOrderList = service.filterTrackOrder(status, date, assignment, searchKey);
 		List<OrderBean> deliveryBoysList = service.getDeliveryBoysList();
 		model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TRACK_ORDER_BEAN, filterOrderList);
 		model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_DELIVERY_BOYS_BEAN, deliveryBoysList);
@@ -425,8 +432,9 @@ public class OrderController {
 	 */
 	@RequestMapping(value = OrderNaoConstants.PATH_TRACK_DELIVERY_SEARCH)
 	public String searchTrackDelivery(@RequestParam(OrderNaoConstants.REQUEST_PARAM_SEARCH_KEY) String searchKey,
-			Model model) {
+			Model model, HttpSession session) {
 		logger.info("Entry at searchTrackDelivery(Controller) search key:- " + searchKey);
+		session.setAttribute(OrderNaoConstants.SESSION_ATTRIBUTE_SEARCH_KEY, searchKey);
 		List<OrderBean> searchOrderList = service.searchTrackDelivery(searchKey);
 		List<OrderBean> deliveryBoysList = service.getDeliveryBoysList();
 		model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TRACK_ORDER_BEAN, searchOrderList);
@@ -456,17 +464,22 @@ public class OrderController {
 		}
 	}
 
-	@RequestMapping(value = OrderNaoConstants.PATH_ORDER_STATUS_MODAL)
-	@ResponseBody
-	public String showOrderStatusModal(@RequestParam(OrderNaoConstants.REQUEST_PARAM_ORDERNUMBER) String orderNumber,
-			@RequestParam(OrderNaoConstants.REQUEST_PARAM_NEW_STATUS_OF_ORDER) String newStatusOfOrder,
-			HttpSession session) {
-		session.setAttribute(OrderNaoConstants.SESSION_ATTRIBUTE_NEW_ORDER_STATUS, newStatusOfOrder);
-		session.setAttribute(OrderNaoConstants.SESSION_ATTRIBUTE_ORDER_NUMBER, orderNumber);
-		logger.info(
-				"showOrderStatusModal Order Number :- " + orderNumber + " New status of order :- " + newStatusOfOrder);
-		return OrderNaoConstants.RETURN_STATUS_SUCCESS;
-	}
+	/*
+	 * @RequestMapping(value = OrderNaoConstants.PATH_ORDER_STATUS_MODAL)
+	 * 
+	 * @ResponseBody public String
+	 * showOrderStatusModal(@RequestParam(OrderNaoConstants.
+	 * REQUEST_PARAM_ORDERNUMBER) String orderNumber,
+	 * 
+	 * @RequestParam(OrderNaoConstants.REQUEST_PARAM_NEW_STATUS_OF_ORDER) String
+	 * newStatusOfOrder, HttpSession session) {
+	 * session.setAttribute(OrderNaoConstants.
+	 * SESSION_ATTRIBUTE_NEW_ORDER_STATUS, newStatusOfOrder);
+	 * session.setAttribute(OrderNaoConstants.SESSION_ATTRIBUTE_ORDER_NUMBER,
+	 * orderNumber); logger.info( "showOrderStatusModal Order Number :- " +
+	 * orderNumber + " New status of order :- " + newStatusOfOrder); return
+	 * OrderNaoConstants.RETURN_STATUS_SUCCESS; }
+	 */
 
 	@RequestMapping(value = OrderNaoConstants.PATH_SAVE_FAILED_STATUS_COMMENT, method = RequestMethod.POST)
 	public String saveFailedStatusCommentsOfOrder(@RequestParam(OrderNaoConstants.REQUEST_PARAM_STATUS) String status,
@@ -474,14 +487,16 @@ public class OrderController {
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_ASSIGNMENT) String assignment,
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_ORDERNUMBER) int orderNumber,
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_NEW_STATUS) String newStatusOfOrder,
-			@RequestParam(OrderNaoConstants.REQUEST_PARAM_FAILED_STATUS_COMMENTS) String failedComments,Model model) {
-		logger.info("Entry at saveFailedStatusCommentsOfOrder(Controller) Failed Comments :- " + failedComments);
+			@RequestParam(OrderNaoConstants.REQUEST_PARAM_FAILED_STATUS_COMMENTS) String failedComments, Model model) {
+		logger.info("Entry at saveFailedStatusCommentsOfOrder(Controller) ");
+		logger.info("status :-" + status + " date :- " + date + " assignment :- " + assignment + " orderNumber :- "
+				+ orderNumber + " New Status :- " + newStatusOfOrder + "	Failed Comments :- " + failedComments);
 		String returnMessage = service.savePendingOrDeliveredOrFailedOrder(orderNumber, newStatusOfOrder,
 				failedComments);
 		if (returnMessage.equals(OrderNaoConstants.RETURN_STATUS_SUCCESS)) {
-			logger.info("Forwarding request(Controller");
+			logger.info("Forwarding request(Controller) ");
 			logger.info("Exit at saveFailedStatusCommentsOfOrder(Controller) ");
-			return "forward:/filter-track-order?status=" + status + "&date=" + date + "&assignment=" + assignment;
+			return "redirect:/filter-track-order?status=" + status + "&date=" + date + "&assignment=" + assignment;
 		} else if (returnMessage.equals(OrderNaoConstants.RETURN_STATUS_ERROR)) {
 			logger.info("Exit at saveFailedStatusCommentsOfOrder(Controller) ");
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER,
@@ -505,14 +520,16 @@ public class OrderController {
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_DATE) String date,
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_ASSIGNMENT) String assignment,
 			@RequestParam(OrderNaoConstants.REQUEST_PARAM_ORDERNUMBER) int orderNumber,
-			@RequestParam(OrderNaoConstants.REQUEST_PARAM_NEW_STATUS) String newStatus,Model model) {
+			@RequestParam(OrderNaoConstants.REQUEST_PARAM_NEW_STATUS) String newStatus, Model model) {
 		logger.info("Entry at savePendingOrDeliveredStatusOfOrder(Controller) ");
+		logger.info("status :-" + status + " date :- " + date + " assignment :- " + assignment + " orderNumber :- "
+				+ orderNumber + " New Status :- " + newStatus);
 		String failedStatus = "";
 		String returnMessage = service.savePendingOrDeliveredOrFailedOrder(orderNumber, newStatus, failedStatus);
 		if (returnMessage.equals(OrderNaoConstants.RETURN_STATUS_SUCCESS)) {
-			logger.info("Forwarding request(Controller");
+			logger.info("Forwarding request(Controller) ");
 			logger.info("Exit at savePendingOrDeliveredStatusOfOrder(Controller) ");
-			return "forward:/filter-track-order?status=" + status + "&date=" + date + "&assignment=" + assignment;
+			return "redirect:/filter-track-order?status=" + status + "&date=" + date + "&assignment=" + assignment;
 		} else if (returnMessage.equals(OrderNaoConstants.RETURN_STATUS_ERROR)) {
 			logger.info("Exit at savePendingOrDeliveredStatusOfOrder(Controller) ");
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER,

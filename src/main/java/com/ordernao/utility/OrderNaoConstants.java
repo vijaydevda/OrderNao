@@ -53,7 +53,7 @@ public final class OrderNaoConstants {
 	public static final String MANAGER = "manager";
 	public static final String CALL_OPERATOR = "callOperator";
 	public static final String DELIVERY_BOY = "deliveryBoys";
-	public static final int ADMIN_TYPE=1;
+	public static final int ADMIN_TYPE = 1;
 	public static final int MANAGER_TYPE = 2;
 	public static final int CALL_OPERATOR_TYPE = 3;
 	public static final int DELIVERY_BOY_TYPE = 4;
@@ -164,5 +164,6 @@ public final class OrderNaoConstants {
 	public static final String RETURN_STATUS_SUSPICIOUS_ACTIVITY = "suspiciousActivity";
 	public static final String REQUEST_PARAM_NEW_STATUS = "newStatus";
 	public static final String REQUEST_PARAM_FAILED_STATUS_COMMENTS = "failedComments";
+	public static final String SESSION_ATTRIBUTE_SEARCH_KEY = "searchKeyValue";
 
 }

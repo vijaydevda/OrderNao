@@ -168,16 +168,15 @@ public class OrderService {
 		return dao.getDeliveryBoysList();
 	}
 
-	public boolean assignOrderToDeliveryBoy(int deliveryBoyId, int orderNumber) {
-		logger.info("Entry at assignOrderToDeliveryBoy(Service)");
-		boolean status = false;
-		int result = dao.updateDeliveryBoyInOrdersTable(deliveryBoyId, orderNumber);
-		if (result > 0) {
-			status = true;
-		}
-		logger.info("Exit at assignOrderToDeliveryBoy(Service)");
-		return status;
-	}
+	/*
+	 * public boolean assignOrderToDeliveryBoy(int deliveryBoyId, int
+	 * orderNumber) { logger.info("Entry at assignOrderToDeliveryBoy(Service)");
+	 * boolean status = false; int result =
+	 * dao.updateDeliveryBoyInOrdersTable(deliveryBoyId, orderNumber); if
+	 * (result > 0) { status = true; }
+	 * logger.info("Exit at assignOrderToDeliveryBoy(Service)"); return status;
+	 * }
+	 */
 
 	public List<OrderBean> getMoreDetailOfOrder(int orderNumber) {
 		logger.info("Entry at getMoreDetailOfOrder(Service)");
@@ -193,47 +192,35 @@ public class OrderService {
 
 	}
 
-	public List<OrderBean> filterOrdersByStatus(String status) {
-		logger.info("Entry at filterOrdersByStatus(Service)");
-		List<OrderBean> filteredOrderList = new ArrayList<OrderBean>();
-		try {
-			logger.info("Exit at filterOrdersByStatus(Service)");
-			filteredOrderList = dao.filterOrdersByStatus(status);
-			return filteredOrderList;
-
-		} catch (Exception e) {
-			logger.error("Exception :- " + e);
-			return filteredOrderList;
-		}
-	}
-
-	public List<OrderBean> filterOrdersByDate(String date) {
-		logger.info("Entry at filterOrdersByDate(Service)");
-		List<OrderBean> filteredOrderList = new ArrayList<OrderBean>();
-		try {
-			logger.info("Exit at filterOrdersByDate(Service)");
-			filteredOrderList = dao.filterOrdersByDate(date);
-			return filteredOrderList;
-
-		} catch (Exception e) {
-			logger.error("Exception :- " + e);
-			return filteredOrderList;
-		}
-	}
-
-	public List<OrderBean> filterOrdersByAssignment(String assignment) {
-		logger.info("Entry at filterOrdersByAssignment(Service)");
-		List<OrderBean> filteredOrderList = new ArrayList<OrderBean>();
-		try {
-			logger.info("Exit at filterOrdersByAssignment(Service)");
-			filteredOrderList = dao.filterOrdersByAssignment(assignment);
-			return filteredOrderList;
-
-		} catch (Exception e) {
-			logger.error("Exception :- " + e);
-			return filteredOrderList;
-		}
-	}
+	/*
+	 * public List<OrderBean> filterOrdersByStatus(String status) {
+	 * logger.info("Entry at filterOrdersByStatus(Service)"); List<OrderBean>
+	 * filteredOrderList = new ArrayList<OrderBean>(); try {
+	 * logger.info("Exit at filterOrdersByStatus(Service)"); filteredOrderList =
+	 * dao.filterOrdersByStatus(status); return filteredOrderList;
+	 * 
+	 * } catch (Exception e) { logger.error("Exception :- " + e); return
+	 * filteredOrderList; } }
+	 * 
+	 * public List<OrderBean> filterOrdersByDate(String date) {
+	 * logger.info("Entry at filterOrdersByDate(Service)"); List<OrderBean>
+	 * filteredOrderList = new ArrayList<OrderBean>(); try {
+	 * logger.info("Exit at filterOrdersByDate(Service)"); filteredOrderList =
+	 * dao.filterOrdersByDate(date); return filteredOrderList;
+	 * 
+	 * } catch (Exception e) { logger.error("Exception :- " + e); return
+	 * filteredOrderList; } }
+	 * 
+	 * public List<OrderBean> filterOrdersByAssignment(String assignment) {
+	 * logger.info("Entry at filterOrdersByAssignment(Service)");
+	 * List<OrderBean> filteredOrderList = new ArrayList<OrderBean>(); try {
+	 * logger.info("Exit at filterOrdersByAssignment(Service)");
+	 * filteredOrderList = dao.filterOrdersByAssignment(assignment); return
+	 * filteredOrderList;
+	 * 
+	 * } catch (Exception e) { logger.error("Exception :- " + e); return
+	 * filteredOrderList; } }
+	 */
 
 	public List<OrderBean> searchTrackDelivery(String searchKey) {
 		logger.info("Entry at searchTrackDelivery(Service)");
@@ -268,17 +255,15 @@ public class OrderService {
 		}
 	}
 
-	public boolean checkForPendingOrDeliveredOrder(int orderNumber) {
-		logger.info("Entry at checkForPendingOrFailedOrder(Service)");
-		int result = dao.checkForPendingOrDeliveredOrder(orderNumber);
-		if (result > 0) {
-			logger.info("Exit at checkForPendingOrFailedOrder(Service)");
-			return true;
-		} else {
-			logger.info("Exit at checkForPendingOrFailedOrder(Service)");
-			return false;
-		}
-	}
+	/*
+	 * public boolean checkForPendingOrDeliveredOrder(int orderNumber) {
+	 * logger.info("Entry at checkForPendingOrFailedOrder(Service)"); int result
+	 * = dao.checkForPendingOrDeliveredOrder(orderNumber); if (result > 0) {
+	 * logger.info("Exit at checkForPendingOrFailedOrder(Service)"); return
+	 * true; } else {
+	 * logger.info("Exit at checkForPendingOrFailedOrder(Service)"); return
+	 * false; } }
+	 */
 
 	/*
 	 * public boolean saveFailedStatusCommentsOfOrder(String orderNumber, String
@@ -304,71 +289,51 @@ public class OrderService {
 	 * false; } }
 	 */
 
-	public boolean checkDeliveryBoyIdInDB(int deliveryBoyId) {
-		logger.info("Entry at savePendingOrFailedOrderStatus(Service)");
-		int result = dao.checkDeliveryBoyIdInDB(deliveryBoyId);
-		if (result > 0) {
-			logger.info("Exit at checkDeliveryBoyIdInDB(Service)");
-			return true;
-		} else {
-			logger.info("Exit at checkDeliveryBoyIdInDB(Service)");
-			return false;
-		}
-	}
+	/*
+	 * public boolean checkDeliveryBoyIdInDB(int deliveryBoyId) {
+	 * logger.info("Entry at savePendingOrFailedOrderStatus(Service)"); int
+	 * result = dao.checkDeliveryBoyIdInDB(deliveryBoyId); if (result > 0) {
+	 * logger.info("Exit at checkDeliveryBoyIdInDB(Service)"); return true; }
+	 * else { logger.info("Exit at checkDeliveryBoyIdInDB(Service)"); return
+	 * false; } }
+	 * 
+	 * public List<OrderBean> filterOrdersByStatusAndTime(String date, String
+	 * status) { logger.info("Entry at filterOrdersByStatusAndTime(Service)");
+	 * List<OrderBean> filteredOrderList = new ArrayList<OrderBean>(); try {
+	 * logger.info("Exit at filterOrdersByStatusAndTime(Service)");
+	 * filteredOrderList = dao.filterOrdersByStatusAndTime(date, status); return
+	 * filteredOrderList; } catch (Exception e) { logger.error("Exception :- " +
+	 * e); return filteredOrderList; } }
+	 * 
+	 * public List<OrderBean> filterOrdersByTimeAndAssignment(String time,
+	 * String assignment) {
+	 * logger.info("Entry at filterOrdersByTimeAndAssignment(Service)");
+	 * List<OrderBean> filteredOrderList = new ArrayList<OrderBean>(); try {
+	 * logger.info("Exit at filterOrdersByTimeAndAssignment(Service)");
+	 * filteredOrderList = dao.filterOrdersByTimeAndAssignment(time,
+	 * assignment); return filteredOrderList; } catch (Exception e) {
+	 * logger.error("Exception :- " + e); return filteredOrderList; } }
+	 * 
+	 * public List<OrderBean> filterOrdersByStatusAndAssignment(String status,
+	 * String assignment) {
+	 * logger.info("Entry at filterOrdersByStatusAndAssignment(Service)");
+	 * List<OrderBean> filteredOrderList = new ArrayList<OrderBean>(); try {
+	 * logger.info("Exit at filterOrdersByStatusAndAssignment(Service)");
+	 * filteredOrderList = dao.filterOrdersByStatusAndAssignment(status,
+	 * assignment); return filteredOrderList; } catch (Exception e) {
+	 * logger.error("Exception :- " + e); return filteredOrderList; } }
+	 * 
+	 * public List<OrderBean> filterOrdersByStatusAndTimeAndAssignment(String
+	 * status, String time, String assignment) {
+	 * logger.info("Entry at filterOrdersByStatusAndTimeAndAssignment(Service)"
+	 * ); List<OrderBean> filteredOrderList = new ArrayList<OrderBean>(); try {
+	 * logger.info("Exit at filterOrdersByStatusAndTimeAndAssignment(Service)");
+	 * filteredOrderList = dao.filterOrdersByStatusAndTimeAndAssignment(status,
+	 * time, assignment); return filteredOrderList; } catch (Exception e) {
+	 * logger.error("Exception :- " + e); return filteredOrderList; } }
+	 */
 
-	public List<OrderBean> filterOrdersByStatusAndTime(String date, String status) {
-		logger.info("Entry at filterOrdersByStatusAndTime(Service)");
-		List<OrderBean> filteredOrderList = new ArrayList<OrderBean>();
-		try {
-			logger.info("Exit at filterOrdersByStatusAndTime(Service)");
-			filteredOrderList = dao.filterOrdersByStatusAndTime(date, status);
-			return filteredOrderList;
-		} catch (Exception e) {
-			logger.error("Exception :- " + e);
-			return filteredOrderList;
-		}
-	}
-
-	public List<OrderBean> filterOrdersByTimeAndAssignment(String time, String assignment) {
-		logger.info("Entry at filterOrdersByTimeAndAssignment(Service)");
-		List<OrderBean> filteredOrderList = new ArrayList<OrderBean>();
-		try {
-			logger.info("Exit at filterOrdersByTimeAndAssignment(Service)");
-			filteredOrderList = dao.filterOrdersByTimeAndAssignment(time, assignment);
-			return filteredOrderList;
-		} catch (Exception e) {
-			logger.error("Exception :- " + e);
-			return filteredOrderList;
-		}
-	}
-
-	public List<OrderBean> filterOrdersByStatusAndAssignment(String status, String assignment) {
-		logger.info("Entry at filterOrdersByStatusAndAssignment(Service)");
-		List<OrderBean> filteredOrderList = new ArrayList<OrderBean>();
-		try {
-			logger.info("Exit at filterOrdersByStatusAndAssignment(Service)");
-			filteredOrderList = dao.filterOrdersByStatusAndAssignment(status, assignment);
-			return filteredOrderList;
-		} catch (Exception e) {
-			logger.error("Exception :- " + e);
-			return filteredOrderList;
-		}
-	}
-
-	public List<OrderBean> filterOrdersByStatusAndTimeAndAssignment(String status, String time, String assignment) {
-		logger.info("Entry at filterOrdersByStatusAndTimeAndAssignment(Service)");
-		List<OrderBean> filteredOrderList = new ArrayList<OrderBean>();
-		try {
-			logger.info("Exit at filterOrdersByStatusAndTimeAndAssignment(Service)");
-			filteredOrderList = dao.filterOrdersByStatusAndTimeAndAssignment(status, time, assignment);
-			return filteredOrderList;
-		} catch (Exception e) {
-			logger.error("Exception :- " + e);
-			return filteredOrderList;
-		}
-	}
-
-	public List<OrderBean> filterTrackOrder(String status, String date, String assignment) {
+	public List<OrderBean> filterTrackOrder(String status, String date, String assignment, String searchKey) {
 		logger.info("Entry at filterTrackOrder(Service)");
 
 		if ((status != null && status.trim().length() > 0)
@@ -435,6 +400,12 @@ public class OrderService {
 
 			logger.info("Exit at filterTrackOrder(Service)");
 			return dao.filterOrdersByAssignment(assignment);
+		} else if (searchKey != null && searchKey.trim().length() > 0) {
+			// this is used to process request in case of search
+			logger.info("Process request for search :- " + searchKey);
+			logger.info("Exit at ");
+			return dao.searchTrackDelivery(searchKey);
+
 		} else {
 			// no condition is satisfied so we show default page
 			logger.info("Processing default track delivery page (Service)");
@@ -476,6 +447,27 @@ public class OrderService {
 
 		} else {
 			logger.info("Exit at savePendingOrDeliveredOrder(Service) :SuspiciousActivity");
+			return OrderNaoConstants.RETURN_STATUS_SUSPICIOUS_ACTIVITY;
+		}
+	}
+
+	public String deliveryBoyOrderAssignment(int deliveryBoyId, int orderNumber) {
+		logger.info("Entry at deliveryBoyOrderAssignment(Service) ");
+		// here we check for id of delivery boy in db(for suspicious activity
+		// i.e it is used to check if someone try to assign manager to a
+		// particular order)
+		int deliveryBoyStatus = dao.checkDeliveryBoyIdInDB(deliveryBoyId);
+		if (deliveryBoyStatus > 0) {
+			int deliveryBoysUpdate = dao.updateDeliveryBoyInOrdersTable(deliveryBoyId, orderNumber);
+			if (deliveryBoysUpdate > 0) {
+				logger.info("Exit at deliveryBoyOrderAssignment(Service) :success ");
+				return OrderNaoConstants.RETURN_STATUS_SUCCESS;
+			} else {
+				logger.info("Exit at deliveryBoyOrderAssignment(Service) :error");
+				return OrderNaoConstants.RETURN_STATUS_ERROR;
+			}
+		} else {
+			logger.info("Exitat deliveryBoyOrderAssignment(Service) :suspicious activity");
 			return OrderNaoConstants.RETURN_STATUS_SUSPICIOUS_ACTIVITY;
 		}
 	}
