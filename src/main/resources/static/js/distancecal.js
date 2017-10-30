@@ -98,3 +98,4 @@ function calcRoute() {
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
