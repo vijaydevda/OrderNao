@@ -360,9 +360,9 @@ $(document)
 											$('#byAssignment').val(
 													"By Assignment");
 											$("#trackOrderTable").load(
-													"/track-delivery-search",{"searchKey":searchKey}
-															,
-													function() {
+													"/track-delivery-search", {
+														"searchKey" : searchKey
+													}, function() {
 														// alert("Search
 														// Success...");
 													});
@@ -371,6 +371,8 @@ $(document)
 
 				});
 
+// this function is called when escape key is pressed it is used to set default
+// value of drop down(current status dropdown)
 $(document).keyup(
 		function(e) {
 			if (e.keyCode == 27) {
@@ -382,6 +384,88 @@ $(document).keyup(
 				$(myexp).prop('selected', true);
 			}
 		});
+
+/*
+ * this function is called when money_provided_in_morning is updated(changed)
+ * using edit button and input box and clicked on submit button
+ */
+function submitMoney() {
+	// here we fetch money provided in morning using id of input box
+	var moneyProvidedInMorning = $("#moneyProvidedInputBox").val();
+	var selectedBoyId = $("#deliveryBoyList").val();
+	var selectedDeliveryBoyName = $(
+			"#deliveryBoyList option[value='" + selectedBoyId + "']").text();
+	console.log("Inside submit money : moneyProvidedInMorning :- "
+			+ moneyProvidedInMorning + " Delivery Boy Id :- " + selectedBoyId);
+	if (moneyProvidedInMorning < 0) {
+		alert("Money provided in morning can't be less than zero.");
+	} else {
+		// here we update money provided to delivery boy in db
+		$("#deliveryBoysTransactionDetails")
+				.load(
+						"update-delivery-boy-money-provided?deliveryBoyId="
+								+ selectedBoyId + "&moneyProvidedInMorning="
+								+ moneyProvidedInMorning,
+						function() {
+							$("#selectedDeliveryBoyName").text(
+									selectedDeliveryBoyName);
+							$("#totalCollection").load(
+									window.location.href + " #totalCollection");
+							$('#SuspiciousActivityModal').modal({
+								backdrop : 'static',
+								keyboard : true,
+								show : true
+							});
+						});
+	}
+
+}
+
+// this function is used to enable input box(money provided) when clicked on
+// edit money provided button
+function editMoneyProvided() {
+	$("#moneyProvidedInputBox").prop('disabled', false);
+}
+
+// This function is called when delivery boy is selected from drop down from
+// submission reports
+function getDeliveryBoysDetailsFunc(id) {
+	console.log("Inside getDeliveryBoysDetailsFunc()");
+	// here we are fetching delivery boy id which is selected from drop down
+	var selectedDeliveryBoyId = $(id).val();
+	// here we are fetching delivery boy name using it's id and drop down id
+	var selectedDeliveryBoyName = $(
+			"#deliveryBoyList option[value='" + selectedDeliveryBoyId + "']")
+			.text();
+	console.log("DeliveryBoy Id :- " + selectedDeliveryBoyId + " Name :-"
+			+ selectedDeliveryBoyName);
+	// here we fetch selected delivery boy payment details
+	$("#deliveryBoysTransactionDetails").load(
+			"total-delivery-boy-transaction-details?deliveryBoyId="
+					+ selectedDeliveryBoyId, function() {
+				// here we are showing selected delivery boy name in :Name of
+				// delivery boy section
+				$("#selectedDeliveryBoyName").text(selectedDeliveryBoyName);
+
+				$('#SuspiciousActivityModal').modal({
+					backdrop : 'static',
+					keyboard : true,
+					show : true
+				});
+			});
+	
+	// here we fetch selected delivery boy trip details
+	$("#deliveryBoysTripDetails").load(
+			"delivery-boy-trip-details?deliveryBoyId="
+					+ selectedDeliveryBoyId, function() {
+				$('#SuspiciousActivityModal').modal({
+					backdrop : 'static',
+					keyboard : true,
+					show : true
+				});
+			});
+
+}
 
 function filterTrackOrder() {
 	// Here we set empty value for search key
