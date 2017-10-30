@@ -33,10 +33,12 @@
 <body>
 	<div th:replace="fragments/header:: filxedHeader"></div>
 	<div class="container">
-		<div class="dropdown show">
+		<div class="dropdown show form-group">
 			<select id="deliveryBoyList"
-				th:onchange="'getDeliveryBoysDetailsFunc(this);'">
-				<option selected="selected" disabled>Delivery Boys Name</option>
+				th:onchange="'getDeliveryBoysDetailsFunc(this);'"
+				class="form-control">
+				<option selected="selected" disabled>Select Delivery Boy
+					Name</option>
 				<option th:each="deliveryBoy : ${deliveryBoysBean}"
 					th:if="${deliveryBoy != null}"
 					th:value="${deliveryBoy.deliveryBoyId}"
@@ -56,15 +58,18 @@
 					th:text="${totalMoneyToBeCollected}"></span>
 			</h2>
 			<br>
-			<h2>Total collected :50,000</h2>
+			<h2>
+				Total money collected : &#8377; <span
+					th:text="${totalMoneyCollected}"></span>
+			</h2>
 		</div>
 
 		<div class="row">
-			<div id="deliveryBoysTransactionDetails"
-				th:replace="fragments/deliveryBoysTransactionDetails:: transactionDetails"
+			<div id="deliveryBoysPaymentDetails"
+				th:include="fragments/deliveryBoysPaymentDetails:: paymentDetails"
 				class="col-md-6"></div>
 			<div id="deliveryBoysTripDetails"
-				th:replace="fragments/deliveryBoysTripDetails:: tripDetails"></div>
+				th:include="fragments/deliveryBoysTripDetails:: tripDetails"></div>
 		</div>
 
 

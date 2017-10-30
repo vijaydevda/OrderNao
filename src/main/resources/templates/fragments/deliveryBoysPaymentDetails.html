@@ -4,8 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
-	<div id="deliveryBoysTransactionDetails"
-		th:fragment="transactionDetails">
+	<div th:fragment="paymentDetails">
 		<div class="card height">
 			<div class="card-body">
 				<h4 class="card-title">
@@ -27,9 +26,14 @@
 					<strong>Money provided in morning</strong> :&#8377; <span><input
 						id="moneyProvidedInputBox" type="text"
 						th:value="${deliveryBoy != null} ? ${deliveryBoy.totalMoneyProvidedInMorning} : 'N/A'"
-						size="10" disabled="disabled"></span>
+						size="10" disabled="disabled"></span> <input type="hidden"
+						id="oldMoneyProvided"
+						th:value="${deliveryBoy != null} ? ${deliveryBoy.totalMoneyProvidedInMorning} : 'N/A'" />
+
 					<button type="button" onclick="editMoneyProvided();"
-						class="text-uppercase btn-danger">Edit</button>
+						class="text-uppercase btn btn-sm btn-danger">Edit</button>
+					<button type="button" onclick="SaveMoneyProvided();"
+						class="text-uppercase btn btn-sm btn-success">Save</button>
 					<input type="hidden" th:value="${moneyProvidedInMorning}"
 						id="oldMoneyProvided">
 				</p>
@@ -39,7 +43,13 @@
 						th:text="${totalSubmission}"></span>
 				</p>
 				<br>
-				<button class="btn btn-success" onclick="submitMoney();">Submit</button>
+				<div class="form-group">
+					<label for="comment">Comment:</label>
+					<textarea class="form-control" rows="5" id="submitMoneyComment"></textarea>
+				</div>
+				<button class="btn btn-success" onclick="submitMoney();">Submit
+					Money</button>
+
 
 			</div>
 		</div>

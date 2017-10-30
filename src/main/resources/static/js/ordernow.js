@@ -386,22 +386,68 @@ $(document).keyup(
 		});
 
 /*
+ * this function will be called when clicked on Submit Money Button(at the time
+ * of collecting money from delivery boy) first it will check whether any
+ * delivery boy is selected from the list or not if not selected the it return
+ * Please select delivery boy from the dropdown else it will check whether any
+ * comment will be provided or not if not it will return please provide comments
+ * else if will process request
+ */
+function submitMoney() {
+	var comments = $('textarea#submitMoneyComment').val().trim();
+	var selectedDeliveryBoyId = $("#deliveryBoyList").val();
+	var selectedDeliveryBoyName = $(
+			"#deliveryBoyList option[value='" + selectedDeliveryBoyId + "']").text();
+	
+	console.log("Submit Money :- Comments :- " + comments
+			+ " Selected Delivery Boy Id :- " + selectedDeliveryBoyId);
+	if (selectedDeliveryBoyId == null) {
+		alert("Please select delivery boy from Delivery Boys Name List");
+	} else if (comments.length == 0) {
+		alert("Comment can't be empty.");
+	} else {
+		$("#deliveryBoysPaymentDetails")
+				.load(
+						"update-money-submitted-by-delivery-boy",{"deliveryBoyId":
+								selectedDeliveryBoyId , "comments":
+								comments},
+						function() {
+							$("#selectedDeliveryBoyName").text(
+									selectedDeliveryBoyName);
+							$("#totalCollection").load(
+									window.location.href + " #totalCollection");
+							$('#SuspiciousActivityModal').modal({
+								backdrop : 'static',
+								keyboard : true,
+								show : true
+							});
+						});
+	}
+}
+
+/*
  * this function is called when money_provided_in_morning is updated(changed)
  * using edit button and input box and clicked on submit button
  */
-function submitMoney() {
+function SaveMoneyProvided() {
 	// here we fetch money provided in morning using id of input box
 	var moneyProvidedInMorning = $("#moneyProvidedInputBox").val();
+	var oldMoneyProvided = $("#oldMoneyProvided").val();
 	var selectedBoyId = $("#deliveryBoyList").val();
 	var selectedDeliveryBoyName = $(
 			"#deliveryBoyList option[value='" + selectedBoyId + "']").text();
-	console.log("Inside submit money : moneyProvidedInMorning :- "
-			+ moneyProvidedInMorning + " Delivery Boy Id :- " + selectedBoyId);
-	if (moneyProvidedInMorning < 0) {
-		alert("Money provided in morning can't be less than zero.");
+	console.log("Inside SaveMoneyProvided : moneyProvidedInMorning :- "
+			+ moneyProvidedInMorning + " Delivery Boy Id :- " + selectedBoyId
+			+ " Old value of money provided :- " + oldMoneyProvided);
+	if (selectedBoyId == null) {
+		alert("Please select delivery boy from Delivery Boys Name List");
+	} else if (oldMoneyProvided == moneyProvidedInMorning) {
+		alert("Old value and new value of money provided can't be same.");
+	} else if (moneyProvidedInMorning < 0) {
+		alert("Money provided in morning should be greater than zero.");
 	} else {
 		// here we update money provided to delivery boy in db
-		$("#deliveryBoysTransactionDetails")
+		$("#deliveryBoysPaymentDetails")
 				.load(
 						"update-delivery-boy-money-provided?deliveryBoyId="
 								+ selectedBoyId + "&moneyProvidedInMorning="
@@ -440,24 +486,23 @@ function getDeliveryBoysDetailsFunc(id) {
 	console.log("DeliveryBoy Id :- " + selectedDeliveryBoyId + " Name :-"
 			+ selectedDeliveryBoyName);
 	// here we fetch selected delivery boy payment details
-	$("#deliveryBoysTransactionDetails").load(
-			"total-delivery-boy-transaction-details?deliveryBoyId="
-					+ selectedDeliveryBoyId, function() {
+	$("#deliveryBoysPaymentDetails").load(
+			"delivery-boy-payment-details?deliveryBoyId="
+					+ selectedDeliveryBoyId,
+			function() {
 				// here we are showing selected delivery boy name in :Name of
 				// delivery boy section
 				$("#selectedDeliveryBoyName").text(selectedDeliveryBoyName);
-
-				$('#SuspiciousActivityModal').modal({
-					backdrop : 'static',
-					keyboard : true,
-					show : true
-				});
-			});
-	
-	// here we fetch selected delivery boy trip details
-	$("#deliveryBoysTripDetails").load(
-			"delivery-boy-trip-details?deliveryBoyId="
-					+ selectedDeliveryBoyId, function() {
+				// here we fetch selected delivery boy trip details
+				$("#deliveryBoysTripDetails").load(
+						"delivery-boy-trip-details?deliveryBoyId="
+								+ selectedDeliveryBoyId, function() {
+							$('#SuspiciousActivityModal').modal({
+								backdrop : 'static',
+								keyboard : true,
+								show : true
+							});
+						});
 				$('#SuspiciousActivityModal').modal({
 					backdrop : 'static',
 					keyboard : true,

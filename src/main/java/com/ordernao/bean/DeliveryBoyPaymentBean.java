@@ -5,7 +5,17 @@ public class DeliveryBoyPaymentBean {
 	private double totalDistanceTravelled;
 	private double totalServiceChargeToCollect;
 	private double totalMoneyProvidedInMorning;
+	private double moneyCollected;
 	
+	
+
+	public double getMoneyCollected() {
+		return moneyCollected;
+	}
+
+	public void setMoneyCollected(double moneyCollected) {
+		this.moneyCollected = moneyCollected;
+	}
 
 	public double getTotalMoneyProvidedInMorning() {
 		return totalMoneyProvidedInMorning;

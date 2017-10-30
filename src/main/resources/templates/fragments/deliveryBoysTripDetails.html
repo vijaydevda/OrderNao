@@ -4,7 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
-	<div id="deliveryBoysTripDetails" th:fragment="tripDetails"
+	<div th:fragment="tripDetails"
 		class="col-md-6">
 		<!-- deliveryBoyTripDetails -->
 		<div class="card ">
@@ -12,13 +12,14 @@
 			<div class="card-body" id="hiddendiv">
 				<div th:if="${deliveryBoyTripDetails != null}">
 					<div th:each="tripDetail,count : ${deliveryBoyTripDetails}">
-						<p class="card-text" >
+						<p class="card-text">
 							Trip <span th:text="${count.count}"></span> : <span
-								id="detailsubmition1 " th:text="${tripDetail.totalDistance}"></span> KM
-							FROM <span th:text="${tripDetail.orderPickedFrom}"></span> TO <span
-								th:text="${tripDetail.orderDeliveredAt}"></span> <br> Service Charge : &#8377; <span
-								id="detailsubmitionamout1" th:text="${tripDetail.serviceCharge}"></span>
-							<span th:if="${tripDetail.orderCount > 1 }"><button
+								id="detailsubmition1 " th:text="${tripDetail.totalDistance}"></span>
+							KM FROM <span th:text="${tripDetail.orderPickedFrom}"></span> TO
+							<span th:text="${tripDetail.orderDeliveredAt}"></span> <br>
+							Service Charge : &#8377; <span id="detailsubmitionamout1"
+								th:text="${tripDetail.serviceCharge}"></span> <span
+								th:if="${tripDetail.orderCount > 1 }"><button
 									type="button" id="moreDetail"
 									th:onclick="'tripMoreDetails(\'' + ${tripDetail.orderNumber} + '\');'"
 									class="btn btn-info">More Details</button></span>
@@ -26,7 +27,8 @@
 						<hr>
 					</div>
 				</div>
-				<div th:if="${deliveryBoyTripDetails == null}">No Records Found</div>
+				<div th:if="${deliveryBoyTripDetails == null}">No Records
+					Found</div>
 			</div>
 		</div>
 	</div>

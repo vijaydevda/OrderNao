@@ -168,13 +168,13 @@ public final class OrderNaoConstants {
     public static final String SESSION_ATTRIBUTE_SEARCH_KEY = "searchKeyValue";
     public static final String PATH_SUBMIT_REPORT_HTML = "submitreport.html";
     public static final String PATH_SUBMITTION_REPORTS = "submitreport";
-    public static final String PATH_DELIVERY_BOY_TRANSACTION_DETAILS = "total-delivery-boy-transaction-details";
+    public static final String PATH_DELIVERY_BOY_PAYMENT_DETAILS = "delivery-boy-payment-details";
     public static final String PATH_UPDATE_MONEY_PROVIDED_TO_DELIVERY_BOY = "update-delivery-boy-money-provided";
     public static final String REQUEST_PARAM_DELIVERY_BOY_ID = "deliveryBoyId";
     public static final String GET_TOTAL_DISTANCE_TRAVELLED_BY_DELIVERY_BOY = "getTotalDistanceTravelledByDeliveryBoy";
     public static final String TOTAL_DISTANCE_TRAVELLED = "totalDistanceTravelledByDeliveryBoy";
 
-    public static final String PATH_FRAGMENTS_DELIVERY_BOY_TRANSACTION = "fragments/deliveryBoysTransactionDetails";
+    public static final String PATH_FRAGMENTS_DELIVERY_BOY_TRANSACTION = "fragments/deliveryBoysPaymentDetails";
     public static final String PATH_FRAGMENTS_DELIVERY_BOY_TRIP = "fragments/deliveryBoysTripDetails";
     public static final String MODAL_ATTRIBUTE_DELIVERY_BOY_TRANSACTION_BEAN = "deliveryBoyTransaction";
     public static final String GET_DELIVERY_BOY_TRANSACTION = "getDeliveryBoyTransaction";
@@ -201,5 +201,15 @@ public final class OrderNaoConstants {
     public static final String GET_DELIVERY_BOY_TRIP_DETAILS = "getOrderDetailsAssignedToDeliveryBoy";
     public static final String MODAL_ATTRIBUTE_ORDER_ASSIGNED_TO_DELIVERY_BOYS = "deliveryBoyTripDetails";
     public static final String PATH_FRAGMENTS_DELIVERY_BOY_TRIP_DETAILS = "fragments/deliveryBoysTripDetails";
+	public static final String VALUE_LESS_THAN_ZERO = "Money provided in morning should be greater than zero.";
+	public static final String PATH_UPDATE_MONEY_SUBMITTED_BY_DELIVERY_BOY="update-money-submitted-by-delivery-boy";
+	public static final String REQUEST_PARAM_SUBMITTED_MONEY_COMMENTS = "comments";
+	public static final String EMPTY_COMMENTS="Comments can't be empty.";
+	public static final String UPDATE_MONEY_SUBMITTED_BY_DELIVERY_BOY = "updateMoneySubmittedByDeliveryBoy";
+	public static final String COLUMN_NAME_MONEY_COLLECTED = "dailytransaction.money_collected";
+	public static final String GET_TOTAL_MONEY_COLLECTED = "getTotalMoneyCollected";
+	public static final String MODAL_ATTRIBUTE_TOTAL_MONEY_COLLECTED = "totalMoneyCollected";
+	public static final String ALL_PAYMENT_DETAILS= "all-payment-details";
+	public static final Object NO_MONEY_TO_SUBMIT = "No money to submit";
 
 }
