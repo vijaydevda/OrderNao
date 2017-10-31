@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ordernao.bean.DeliveryBoyPaymentBean;
@@ -166,7 +167,15 @@ public class OrderService {
 	}
 
 	public List<OrderBean> getDeliveryBoysList() {
-		return dao.getDeliveryBoysList();
+		logger.info("Entry at getDeliveryBoysList");
+		List<OrderBean> deliveryBoysList = new ArrayList<OrderBean>();
+		try {
+			deliveryBoysList = dao.getDeliveryBoysList();
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getDeliveryBoysList");
+		return deliveryBoysList;
 	}
 
 	/*
@@ -479,33 +488,27 @@ public class OrderService {
 
 		try {
 			dao.getDeliveryBoyPaymentDetailsFromDailyTransactionTable(deliveryBoyId, paymentBean);
-			if (paymentBean.getMoneyCollected() > 0) {
-				/*
-				 * greater than zero means money is collected from delivery boy
-				 * then we will set money_provided_in_morning to zero(i.e there
-				 * is no need to collect money because it is already collected)
-				 */
-				logger.info("Money is collected from delivery boy");
-				paymentBean.setTotalMoneyProvidedInMorning(0);
-			} else {
-				/*
-				 * here less than zero means no money is collected from delivery
-				 * boy then we will fetch required values(i.e there is need to
-				 * collect money from delivery boys)
-				 */
-				logger.info("Money is not collected from delivery boy");
-				dao.getDeliveryBoyPaymentDetailsFromOrdersTable(deliveryBoyId, paymentBean);
-			}
 		} catch (Exception e) {
-			logger.error("Exception :- ", e);
+			logger.error("Exception :- " + e.getMessage());
+		} finally {
+			try {
+				dao.getDeliveryBoyPaymentDetailsFromOrdersTable(deliveryBoyId, paymentBean);
+			} catch (Exception e) {
+				logger.error("Exception :- " + e);
+			}
 		}
-		logger.info("Exit at getDeliveryBoyPaymentDetails(Service):Success");
+		logger.info("Exit at getDeliveryBoyPaymentDetails(Service)");
 		return paymentBean;
 
 	}
 
 	public boolean checkDeliveryBoy(int deliveryBoyId) {
-		int status = dao.checkDeliveryBoyIdInDB(deliveryBoyId);
+		int status = 0;
+		try {
+			status = dao.checkDeliveryBoyIdInDB(deliveryBoyId);
+		} catch (DataAccessException e) {
+			logger.error("Exception :- " + e.getMessage());
+		}
 		if (status > 0) {
 			return true;
 		} else {
@@ -515,36 +518,38 @@ public class OrderService {
 
 	public boolean updateDeliveryBoyMoneyProvided(int deliveryBoyId, double moneyProvidedInMorning) {
 		logger.info("Entry at updateDeliveryBoyMoneyProvided(Service)");
-		// here we check for current date entry of money provided for a user
-		int currentDateEntry = dao.checkForCurrentDateEntryOfMoneyProvided(deliveryBoyId);
-		if (currentDateEntry > 0) {
-			logger.info("Current Date Entry :- True \nUpdating Money provided");
-			// if entry is found in DB(i.e it is greater than zero) then we
-			// update entry
-			int status = dao.updateDeliveryBoyMoneyProvided(deliveryBoyId, moneyProvidedInMorning);
-			if (status > 0) {
-				// status is greater than zero i.e entry updated in success so
-				// we return true
-				logger.info("Exit at updateDeliveryBoyMoneyProvided(Service)");
-				return true;
+		boolean returnStatus = false;
+		try {
+			// here we check for current date entry of money provided for a user
+			int currentDateEntry = dao.checkForCurrentDateEntryOfMoneyProvided(deliveryBoyId);
+			if (currentDateEntry > 0) {
+				logger.info("Current Date Entry :- True ::: Updating Money provided");
+				// if entry is found in DB(i.e it is greater than zero) then we
+				// update entry
+				int status = dao.updateDeliveryBoyMoneyProvided(deliveryBoyId, moneyProvidedInMorning);
+				if (status > 0) {
+					// status is greater than zero i.e entry updated in success
+					// so
+					// we return true
+					returnStatus = true;
+				}
 			} else {
-				logger.info("Exit at updateDeliveryBoyMoneyProvided(Service)");
-				return false;
+				logger.info("Current Date Entry :- False ::: Inserting Current Date Entry ");
+				// if entry not found in DB then we insert new entry
+				int status = dao.insertCurrentDateEntryForMoneyProvidedToDeliveryBoy(deliveryBoyId,
+						moneyProvidedInMorning);
+				if (status > 0) {
+					// status is greater than zero i.e entry updated is success
+					// so
+					// we return true
+					returnStatus = true;
+				}
 			}
-		} else {
-			logger.info("Current Date Entry :- False\nInserting Current Date Entry ");
-			// if entry not found in DB then we insert new entry
-			int status = dao.insertCurrentDateEntryForMoneyProvidedToDeliveryBoy(deliveryBoyId, moneyProvidedInMorning);
-			if (status > 0) {
-				// status is greater than zero i.e entry updated in success so
-				// we return true
-				logger.info("Exit at updateDeliveryBoyMoneyProvided(Service)");
-				return true;
-			} else {
-				logger.info("Exit at updateDeliveryBoyMoneyProvided(Service)");
-				return false;
-			}
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
 		}
+		logger.info("Exit at updateDeliveryBoyMoneyProvided(Service)");
+		return returnStatus;
 	}
 
 	/**
@@ -559,15 +564,18 @@ public class OrderService {
 	public double getTotalMoneyToBeCollected() {
 		logger.info("Entry at getTotalMoneyToBeCollected(Service)");
 		double totalMoneyToBeCollected = 0;
+		double totalMoneyProvided = 0;
+		double totalServiceChargeToCollect = 0;
 		try {
-			double totalMoneyProvided = dao.getTotalMoneyProvided();
-			double totalServiceChargeToCollect = dao.getTotalServiceCharge();
-			totalMoneyToBeCollected = (totalMoneyProvided + totalServiceChargeToCollect);
-			logger.info("total money provided :- "+totalMoneyProvided+" + total service charge to collect :- "+totalServiceChargeToCollect+ " = "+totalMoneyToBeCollected+"(total Sum)");
-			logger.info("Exit at getTotalMoneyToBeCollected(Service)");
+			totalMoneyProvided = dao.getTotalMoneyProvided();
+			totalServiceChargeToCollect = dao.getTotalServiceCharge();
 		} catch (Exception e) {
-			logger.error("Exception :- ", e);
+			logger.error("Exception :- " + e.getMessage());
 		}
+		totalMoneyToBeCollected = (totalMoneyProvided + totalServiceChargeToCollect);
+		logger.info("total money provided :- " + totalMoneyProvided + " + total service charge to collect :- "
+				+ totalServiceChargeToCollect + " = " + totalMoneyToBeCollected + "(total Sum)");
+		logger.info("Exit at getTotalMoneyToBeCollected(Service)");
 		return totalMoneyToBeCollected;
 	}
 
@@ -580,7 +588,11 @@ public class OrderService {
 	 */
 	public List<OrderBean> getDeliveryBoyTripDetails(int deliveryBoyId) {
 		List<OrderBean> deliveryBoyTripList = new ArrayList<OrderBean>();
-		deliveryBoyTripList = dao.getDeliveryBoyTripDetails(deliveryBoyId);
+		try {
+			deliveryBoyTripList = dao.getDeliveryBoyTripDetails(deliveryBoyId);
+		} catch (Exception e) {
+			logger.error("Exception :- ", e.getMessage());
+		}
 		return deliveryBoyTripList;
 	}
 
@@ -592,10 +604,18 @@ public class OrderService {
 	 * @return updated money status
 	 */
 	public boolean updateMoneySubmittedByDeliveryBoy(int deliveryBoyId, String comments, double moneyCollected) {
-		int submittedMoneyStatus = dao.updateMoneySubmittedByDeliveryBoy(deliveryBoyId, comments, moneyCollected);
+		logger.info("Entry at updateMoneySubmittedByDeliveryBoy");
+		int submittedMoneyStatus = 0;
+		try {
+			submittedMoneyStatus = dao.updateMoneySubmittedByDeliveryBoy(deliveryBoyId, comments, moneyCollected);
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
 		if (submittedMoneyStatus > 0) {
+			logger.info("Exit at updateMoneySubmittedByDeliveryBoy");
 			return true;
 		} else {
+			logger.info("Exit at updateMoneySubmittedByDeliveryBoy");
 			return false;
 		}
 	}
@@ -608,6 +628,24 @@ public class OrderService {
 	 * @return total money collected
 	 */
 	public double getTotalMoneyCollected() {
-		return dao.getTotalMoneyCollected();
+		logger.info("Entry at getTotalMoneyCollected()");
+		double totalMoneyCollected = 0;
+		try {
+			totalMoneyCollected = dao.getTotalMoneyCollected();
+		} catch (Exception e) {
+			logger.error("Exception :- " + e.getMessage());
+		}
+		logger.info("Exit at getTotalMoneyCollected() totalMoneyCollected : " + totalMoneyCollected);
+		return totalMoneyCollected;
+	}
+
+	public List<OrderBean> getDeliveryBoyTripMoreDetails(int orderNumber, int deliveryBoyId) {
+		List<OrderBean> deliveryBoyTripList = new ArrayList<OrderBean>();
+		try {
+			deliveryBoyTripList = dao.getDeliveryBoyTripMoreDetails(orderNumber, deliveryBoyId);
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		return deliveryBoyTripList;
 	}
 }

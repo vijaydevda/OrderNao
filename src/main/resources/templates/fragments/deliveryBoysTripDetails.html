@@ -4,8 +4,7 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <body>
-	<div th:fragment="tripDetails"
-		class="col-md-6">
+	<div th:fragment="tripDetails" class="col-md-6">
 		<!-- deliveryBoyTripDetails -->
 		<div class="card ">
 			<h4 class="card-title">Trips details</h4>
@@ -18,10 +17,11 @@
 							KM FROM <span th:text="${tripDetail.orderPickedFrom}"></span> TO
 							<span th:text="${tripDetail.orderDeliveredAt}"></span> <br>
 							Service Charge : &#8377; <span id="detailsubmitionamout1"
-								th:text="${tripDetail.serviceCharge}"></span> <span
+								th:text="${tripDetail.serviceCharge}"></span><br>Order
+							Status : <span th:text="${tripDetail.orderStatus}"></span> <span
 								th:if="${tripDetail.orderCount > 1 }"><button
 									type="button" id="moreDetail"
-									th:onclick="'tripMoreDetails(\'' + ${tripDetail.orderNumber} + '\');'"
+									th:onclick="'tripMoreDetails(\'' + ${tripDetail.orderNumber} + '\',\'' + ${tripDetail.deliveryBoyId} + '\');'"
 									class="btn btn-info">More Details</button></span>
 						</p>
 						<hr>

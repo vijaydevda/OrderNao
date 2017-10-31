@@ -211,5 +211,9 @@ public final class OrderNaoConstants {
 	public static final String MODAL_ATTRIBUTE_TOTAL_MONEY_COLLECTED = "totalMoneyCollected";
 	public static final String ALL_PAYMENT_DETAILS= "all-payment-details";
 	public static final Object NO_MONEY_TO_SUBMIT = "No money to submit";
+	public static final String MODAL_ATTRIBUTE_MONEY_ALREADY_SUBMITTED = "moneyAlreadySubmitted";
+	public static final String PATH_GET_MORE_DETAIL_OF_TRIP="get-more-detail-of-trip";
+	public static final String GET_DELIVERY_BOY_TRIP_MORE_DETAILS="getMoreDetailsOfTrip";
+	public static final String PATH_FRAGMENTS_DELIVERY_BOY_TRIP_MORE_DETAILS = "fragments/deliveryBoyTripMoreDetails";
 
 }

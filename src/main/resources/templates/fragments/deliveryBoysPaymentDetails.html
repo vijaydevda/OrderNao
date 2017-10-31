@@ -42,13 +42,17 @@
 					<strong>Total Submissions</strong> :&#8377; <span
 						th:text="${totalSubmission}"></span>
 				</p>
-				<br>
-				<div class="form-group">
-					<label for="comment">Comment:</label>
-					<textarea class="form-control" rows="5" id="submitMoneyComment"></textarea>
+				<br> <span th:if="${moneyAlreadySubmitted} == true">
+					<button class="btn btn-info">Money Already Submitted</button>
+				</span>
+				<div th:if="${moneyAlreadySubmitted} == false">
+					<span class="form-group"> <label for="comment">Comment:</label>
+						<textarea class="form-control" rows="5" id="submitMoneyComment"></textarea>
+					</span>
+					<button class="btn btn-success" onclick="submitMoney();">Submit
+						Money</button>
+
 				</div>
-				<button class="btn btn-success" onclick="submitMoney();">Submit
-					Money</button>
 
 
 			</div>

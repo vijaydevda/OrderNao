@@ -523,8 +523,8 @@ public class OrderDao {
 				paymentBean.setTotalServiceChargeToCollect(
 						rs.getDouble(OrderNaoConstants.COLUMN_NAME_TOTAL_SERVICE_CHARGE_TO_COLLECT));
 				logger.info("ID :- " + paymentBean.getDeliveryBoyId() + " Total Distance Travelled :- "
-						+ paymentBean.getTotalDistanceTravelled() + " Money Provided In Morning :- "
-						+ paymentBean.getTotalMoneyProvidedInMorning());
+						+ paymentBean.getTotalDistanceTravelled() + " Total Service Charge To Collect :- "
+						+ paymentBean.getTotalServiceChargeToCollect());
 				return paymentBean;
 			}
 		});
@@ -544,7 +544,8 @@ public class OrderDao {
 				paymentBean.setTotalMoneyProvidedInMorning(
 						rs.getDouble(OrderNaoConstants.COLUMN_NAME_TOTAL_MONEY_PROVIDED));
 				paymentBean.setMoneyCollected(rs.getDouble(OrderNaoConstants.COLUMN_NAME_MONEY_COLLECTED));
-				logger.info(" Money Provided In Morning :- " + paymentBean.getTotalMoneyProvidedInMorning());
+				logger.info(" Money Provided In Morning :- " + paymentBean.getTotalMoneyProvidedInMorning()
+						+ " Get Total Money Collected :- " + paymentBean.getMoneyCollected());
 				return paymentBean;
 			}
 		});
@@ -577,12 +578,12 @@ public class OrderDao {
 	/**
 	 * @return total money provided to all delivery boys (current date)
 	 */
-	public int getTotalMoneyProvided() {
+	public double getTotalMoneyProvided() {
 		logger.info("Entry at getTotalMoneyProvided(DAO)");
 		String sqlQuery = property.getProperty(OrderNaoConstants.GET_TOTAL_MONEY_PROVIDED);
 		logger.info("Query :- " + sqlQuery);
 		logger.info("Exit at getTotalMoneyProvided(DAO)");
-		return jdbcTemplate.queryForObject(sqlQuery, Integer.class);
+		return jdbcTemplate.queryForObject(sqlQuery, Double.class);
 	}
 
 	/**
@@ -640,9 +641,37 @@ public class OrderDao {
 
 	public double getTotalMoneyCollected() {
 		logger.info("Entry at getTotalMoneyCollected");
-		String query=property.getProperty(OrderNaoConstants.GET_TOTAL_MONEY_COLLECTED);
-		logger.info("Entry at getTotalMoneyCollected");
-		return jdbcTemplate.queryForObject(query,Double.class);
+		String query = property.getProperty(OrderNaoConstants.GET_TOTAL_MONEY_COLLECTED);
+		logger.info("Exit at getTotalMoneyCollected");
+		return jdbcTemplate.queryForObject(query, Double.class);
+	}
+
+	/**
+	 * @author shubham sharma
+	 * @date 31-Oct-2017
+	 * @time 3:35:08 PM
+	 * @description this method is used to fetch more details of the trips done
+	 *              by delivery boy
+	 * @return more details of trips
+	 */
+	public List<OrderBean> getDeliveryBoyTripMoreDetails(int orderNumber, int deliveryBoyId) {
+		logger.info("Entry at getDeliveryBoyTripMoreDetails(DAO) orderNumber :- " + orderNumber + " DeliveryBoyId :- "
+				+ deliveryBoyId);
+		String sqlQuery = property.getProperty(OrderNaoConstants.GET_DELIVERY_BOY_TRIP_MORE_DETAILS);
+		logger.info("Exit at getDeliveryBoyTripMoreDetails(DAO) Query :- " + sqlQuery);
+		return jdbcTemplate.query(sqlQuery, new Object[] { orderNumber, deliveryBoyId }, new RowMapper<OrderBean>() {
+			@Override
+			public OrderBean mapRow(ResultSet rs, int rowNum) throws SQLException {
+				OrderBean orderBean = new OrderBean();
+				orderBean.setOrderPickedFrom(rs.getString(OrderNaoConstants.COLUMN_NAME_PICKUP_POINT));
+				orderBean.setOrderDeliveredAt(rs.getString(OrderNaoConstants.COLUMN_NAME_DELIVERY_POINT));
+				orderBean.setItemName(rs.getString(OrderNaoConstants.COLUMN_NAME_ITEM_NAME));
+				logger.info("itemname :" + orderBean.getItemName());
+				logger.info("pickup point :" + orderBean.getOrderPickedFrom());
+				logger.info("delivery point :" + orderBean.getOrderDeliveredAt());
+				return orderBean;
+			}
+		});
 	}
 
 }

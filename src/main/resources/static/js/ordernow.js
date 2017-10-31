@@ -397,8 +397,9 @@ function submitMoney() {
 	var comments = $('textarea#submitMoneyComment').val().trim();
 	var selectedDeliveryBoyId = $("#deliveryBoyList").val();
 	var selectedDeliveryBoyName = $(
-			"#deliveryBoyList option[value='" + selectedDeliveryBoyId + "']").text();
-	
+			"#deliveryBoyList option[value='" + selectedDeliveryBoyId + "']")
+			.text();
+
 	console.log("Submit Money :- Comments :- " + comments
 			+ " Selected Delivery Boy Id :- " + selectedDeliveryBoyId);
 	if (selectedDeliveryBoyId == null) {
@@ -408,9 +409,11 @@ function submitMoney() {
 	} else {
 		$("#deliveryBoysPaymentDetails")
 				.load(
-						"update-money-submitted-by-delivery-boy",{"deliveryBoyId":
-								selectedDeliveryBoyId , "comments":
-								comments},
+						"update-money-submitted-by-delivery-boy",
+						{
+							"deliveryBoyId" : selectedDeliveryBoyId,
+							"comments" : comments
+						},
 						function() {
 							$("#selectedDeliveryBoyName").text(
 									selectedDeliveryBoyName);
@@ -467,6 +470,27 @@ function SaveMoneyProvided() {
 
 }
 
+function tripMoreDetails(orderNumber, selectedDeliveryBoyId) {
+	console.log("TripMoreDetails :- OrderNumber : " + orderNumber
+			+ " DeliveryBoyId : " + selectedDeliveryBoyId);
+	$("#deliveryBoyTripMoreDetails").load(
+			"get-more-detail-of-trip?orderNumber=" + orderNumber
+					+ "&deliveryBoyId=" + selectedDeliveryBoyId, function() {
+
+				$('#tripMoreDetailModal').modal({
+					backdrop : 'static',
+					keyboard : true,
+					show : true
+				});
+				$('#SuspiciousActivityModal').modal({
+					backdrop : 'static',
+					keyboard : true,
+					show : true
+				});
+			});
+
+}
+
 // this function is used to enable input box(money provided) when clicked on
 // edit money provided button
 function editMoneyProvided() {
@@ -494,15 +518,21 @@ function getDeliveryBoysDetailsFunc(id) {
 				// delivery boy section
 				$("#selectedDeliveryBoyName").text(selectedDeliveryBoyName);
 				// here we fetch selected delivery boy trip details
-				$("#deliveryBoysTripDetails").load(
-						"delivery-boy-trip-details?deliveryBoyId="
-								+ selectedDeliveryBoyId, function() {
-							$('#SuspiciousActivityModal').modal({
-								backdrop : 'static',
-								keyboard : true,
-								show : true
-							});
-						});
+				$("#deliveryBoysTripDetails")
+						.load(
+								"delivery-boy-trip-details?deliveryBoyId="
+										+ selectedDeliveryBoyId,
+								function() {
+									$("#totalCollection").load(
+											window.location.href
+													+ " #totalCollection");
+
+									$('#SuspiciousActivityModal').modal({
+										backdrop : 'static',
+										keyboard : true,
+										show : true
+									});
+								});
 				$('#SuspiciousActivityModal').modal({
 					backdrop : 'static',
 					keyboard : true,

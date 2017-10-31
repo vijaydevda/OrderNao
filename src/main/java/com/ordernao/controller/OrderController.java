@@ -595,8 +595,19 @@ public class OrderController {
 			 */
 			double totalSubmission = paymentBean.getTotalMoneyProvidedInMorning()
 					+ paymentBean.getTotalServiceChargeToCollect();
-			double totalMoneyCollected = service.getTotalMoneyCollected();
-			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TOTAL_MONEY_COLLECTED, totalMoneyCollected);
+			logger.info(
+					"Total Submission :- " + totalSubmission + " MoneyCollected :- " + paymentBean.getMoneyCollected());
+			if (totalSubmission == paymentBean.getMoneyCollected()) {
+				/*
+				 * if totalSubmission equals to moneyCollectedFromDeliveryBoy
+				 * then we hide submit money button from delivery boy & show
+				 * Already submitted button
+				 */
+				logger.info("Money Already Collected From Delivery Boy");
+				model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_MONEY_ALREADY_SUBMITTED, true);
+			} else {
+				model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_MONEY_ALREADY_SUBMITTED, false);
+			}
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TOTAL_SUBMISSION, totalSubmission);
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_DELIVERY_BOY_TRANSACTION_DETAILS, paymentBean);
 			logger.info("Exit at getDeliveryBoyPaymentDetails(Controller):Success");
@@ -636,9 +647,6 @@ public class OrderController {
 						moneyProvidedInMorning);
 				if (moneyProvidedUpdateStatus) {
 					// Here we are fetching delivery boy payment details
-					double moneyToBeCollected = service.getTotalMoneyToBeCollected();
-					model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TOTAL_MONEY_TO_BE_COLLECTED,
-							moneyToBeCollected);
 					DeliveryBoyPaymentBean paymentBean = service.getDeliveryBoyPaymentDetails(deliveryBoyId);
 					/*
 					 * Here we are calculating total submission it is sum of
@@ -647,8 +655,20 @@ public class OrderController {
 					 */
 					double totalSubmission = paymentBean.getTotalMoneyProvidedInMorning()
 							+ paymentBean.getTotalServiceChargeToCollect();
-					double totalMoneyCollected = service.getTotalMoneyCollected();
-					model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TOTAL_MONEY_COLLECTED, totalMoneyCollected);
+					logger.info("Total Submission :- " + totalSubmission + " MoneyCollected :- "
+							+ paymentBean.getMoneyCollected());
+					if (totalSubmission == paymentBean.getMoneyCollected()) {
+						/*
+						 * if totalSubmission equals to
+						 * moneyCollectedFromDeliveryBoy then we hide submit
+						 * money button from delivery boy & show Already
+						 * submitted button
+						 */
+						logger.info("Money Already Collected From Delivery Boy");
+						model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_MONEY_ALREADY_SUBMITTED, true);
+					} else {
+						model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_MONEY_ALREADY_SUBMITTED, false);
+					}
 					model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TOTAL_SUBMISSION, totalSubmission);
 					model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_DELIVERY_BOY_TRANSACTION_DETAILS, paymentBean);
 					logger.info("Exit at updateDeliveryBoyMoneyProvided(Controller):Success");
@@ -700,11 +720,11 @@ public class OrderController {
 			List<OrderBean> ordersAssignedToDeliveryBoy = service.getDeliveryBoyTripDetails(deliveryBoyId);
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ORDER_ASSIGNED_TO_DELIVERY_BOYS,
 					ordersAssignedToDeliveryBoy);
-			logger.info("Exit at updateDeliveryBoyMoneyProvided(Controller):Success");
+			logger.info("Exit at getDeliveryBoyTripDetails(Controller)");
 			return OrderNaoConstants.PATH_FRAGMENTS_DELIVERY_BOY_TRIP_DETAILS;
 
 		} else {
-			logger.info("Exit at updateDeliveryBoyMoneyProvided(Controller):SuspiciousActivity");
+			logger.info("Exit at getDeliveryBoyTripDetails(Controller):SuspiciousActivity");
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER,
 					OrderNaoConstants.SUSPICIOUS_ACTIVITY_MSG_HEADER);
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE,
@@ -744,15 +764,11 @@ public class OrderController {
 				DeliveryBoyPaymentBean paymentBean = service.getDeliveryBoyPaymentDetails(deliveryBoyId);
 				double totalMoneyThatDeliveryBoyWillSubmit = paymentBean.getTotalMoneyProvidedInMorning()
 						+ paymentBean.getTotalServiceChargeToCollect();
-				logger.info("Total money that delivery boy will submit :- " + totalMoneyThatDeliveryBoyWillSubmit);
-				if (totalMoneyThatDeliveryBoyWillSubmit > 0) {
+
+				if (totalMoneyThatDeliveryBoyWillSubmit != paymentBean.getMoneyCollected()) {
 					boolean submittedMoneyStatus = service.updateMoneySubmittedByDeliveryBoy(deliveryBoyId, comments,
 							totalMoneyThatDeliveryBoyWillSubmit);
 					if (submittedMoneyStatus) {
-						double moneyToBeCollected = service.getTotalMoneyToBeCollected();
-						logger.info("Total Money To Be Collected :- " + moneyToBeCollected);
-						model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TOTAL_MONEY_TO_BE_COLLECTED,
-								moneyToBeCollected);
 						// Here again we are fetching delivery boy
 						// details(updated
 						// details)
@@ -760,10 +776,18 @@ public class OrderController {
 						double totalSubmission = paymentBean.getTotalMoneyProvidedInMorning()
 								+ paymentBean.getTotalServiceChargeToCollect();
 
-						double totalMoneyCollected = service.getTotalMoneyCollected();
-						logger.info("Total Collected Money :- " + totalMoneyCollected);
-						model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TOTAL_MONEY_COLLECTED,
-								totalMoneyCollected);
+						if (totalSubmission == paymentBean.getMoneyCollected()) {
+							/*
+							 * if totalSubmission equals to
+							 * moneyCollectedFromDeliveryBoy then we hide submit
+							 * money button from delivery boy & show Already
+							 * submitted button
+							 */
+							logger.info("Money Already Collected From Delivery Boy");
+							model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_MONEY_ALREADY_SUBMITTED, true);
+						} else {
+							model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_MONEY_ALREADY_SUBMITTED, false);
+						}
 						model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_TOTAL_SUBMISSION, totalSubmission);
 						model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_DELIVERY_BOY_TRANSACTION_DETAILS,
 								paymentBean);
@@ -800,6 +824,40 @@ public class OrderController {
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER,
 					OrderNaoConstants.ERROR_MSG_HEADER);
 			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE, OrderNaoConstants.EMPTY_COMMENTS);
+			return OrderNaoConstants.PATH_SUSPICIOUS_ACTIVITY;
+		}
+
+	}
+
+	@RequestMapping(value = OrderNaoConstants.PATH_GET_MORE_DETAIL_OF_TRIP)
+	public String getMoreDetailOfTrip(@RequestParam(OrderNaoConstants.REQUEST_PARAM_ORDERNUMBER) int orderNumber,
+			@RequestParam(OrderNaoConstants.REQUEST_PARAM_DELIVERY_BOY_ID) int deliveryBoyId, Model model) {
+		logger.info("Entry at getMoreDetailOfTrip(Controller)");
+		/*
+		 * Here we are checking for delivery boys in users & roles table if
+		 * delivery boy exist then we continue otherwise we return suspicious
+		 * activity
+		 */
+		boolean deliveryBoyStatus = service.checkDeliveryBoy(deliveryBoyId);
+		if (deliveryBoyStatus) {
+			List<OrderBean> ordersAssignedToDeliveryBoy = service.getDeliveryBoyTripMoreDetails(orderNumber,
+					deliveryBoyId);
+			for (OrderBean orderBean : ordersAssignedToDeliveryBoy) {
+				logger.info("itemname :" + orderBean.getItemName());
+				logger.info("pickup point :" + orderBean.getOrderPickedFrom());
+				logger.info("delivery point :" + orderBean.getOrderDeliveredAt());
+			}
+			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ORDER_ASSIGNED_TO_DELIVERY_BOYS,
+					ordersAssignedToDeliveryBoy);
+			logger.info("Exit at getMoreDetailOfTrip(Controller)");
+			return OrderNaoConstants.PATH_FRAGMENTS_DELIVERY_BOY_TRIP_MORE_DETAILS;
+
+		} else {
+			logger.info("Exit at getMoreDetailOfTrip(Controller):SuspiciousActivity");
+			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE_HEADER,
+					OrderNaoConstants.SUSPICIOUS_ACTIVITY_MSG_HEADER);
+			model.addAttribute(OrderNaoConstants.MODAL_ATTRIBUTE_ERROR_MESSAGE,
+					OrderNaoConstants.SUSPICIOUS_ACTIVITY_MSG);
 			return OrderNaoConstants.PATH_SUSPICIOUS_ACTIVITY;
 		}
 
