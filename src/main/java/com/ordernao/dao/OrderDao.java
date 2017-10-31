@@ -652,14 +652,14 @@ public class OrderDao {
 	 * @time 3:35:08 PM
 	 * @description this method is used to fetch more details of the trips done
 	 *              by delivery boy
-	 * @return more details of trips
+	 * @return more details of trip
 	 */
 	public List<OrderBean> getDeliveryBoyTripMoreDetails(int orderNumber, int deliveryBoyId) {
 		logger.info("Entry at getDeliveryBoyTripMoreDetails(DAO) orderNumber :- " + orderNumber + " DeliveryBoyId :- "
 				+ deliveryBoyId);
 		String sqlQuery = property.getProperty(OrderNaoConstants.GET_DELIVERY_BOY_TRIP_MORE_DETAILS);
 		logger.info("Exit at getDeliveryBoyTripMoreDetails(DAO) Query :- " + sqlQuery);
-		return jdbcTemplate.query(sqlQuery, new Object[] { orderNumber, deliveryBoyId }, new RowMapper<OrderBean>() {
+		return jdbcTemplate.query(sqlQuery, new Object[] { deliveryBoyId,orderNumber }, new RowMapper<OrderBean>() {
 			@Override
 			public OrderBean mapRow(ResultSet rs, int rowNum) throws SQLException {
 				OrderBean orderBean = new OrderBean();
