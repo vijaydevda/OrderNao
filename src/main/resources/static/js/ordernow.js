@@ -9,6 +9,9 @@ var oldStatus;
 // current status is changed
 var tempOrderNumberForStatusChange;
 var tempStatusForStatusChange;
+
+// this variable is used to persist year selected by user in order reports
+var selectedYear = -1;
 $(document)
 		.ready(
 				function() {
@@ -370,6 +373,128 @@ $(document)
 									});
 
 				});
+
+function getTotalOrderDetailsOfCurrentDate() {
+
+}
+
+function getSuccessfullOrderDetailsOfCurrentDate() {
+
+}
+
+function getDetailsOfOrder(forDate) {
+	var forDailyTotalOrderReport = 1;
+	var forDailySuccessfullOrderReport = 2;
+	var forDailyFailedOrderReport = 3;
+	var forWeeklyTotalOrderReport = 4;
+	var forWeeklySuccessfullOrderReport = 5;
+	var forWeeklyFailedOrderReport = 6;
+	console.log("Inside getDetailsOfOrder : ForDate :- " + forDate);
+
+	if (forDate = forDailyTotalOrderReport) {
+		$("#orderReportsModal").load(
+				"/get-order-reports?forDate=" + forDailyTotalOrderReport,
+				function() {
+					$('#orderReportsModal').modal({
+						backdrop : 'static',
+						keyboard : true,
+						show : true
+					});
+				});
+	} else if (forDate = forDailySuccessfullOrderReport) {
+		$("#orderReportsModal").load(
+				"/get-order-reports?forDate=" + forDailySuccessfullOrderReport,
+				function() {
+					$('#orderReportsModal').modal({
+						backdrop : 'static',
+						keyboard : true,
+						show : true
+					});
+				});
+	} else if (forDate = forDailyFailedOrderReport) {
+		$("#orderReportsModal").load(
+				"/get-order-reports?forDate=" + forDailyFailedOrderReport,
+				function() {
+					$('#orderReportsModal').modal({
+						backdrop : 'static',
+						keyboard : true,
+						show : true
+					});
+				});
+	} else if (forDate = forWeeklyTotalOrderReport) {
+		$("#orderReportsModal").load(
+				"/get-order-reports?forDate=" + forWeeklyTotalOrderReport,
+				function() {
+					$('#orderReportsModal').modal({
+						backdrop : 'static',
+						keyboard : true,
+						show : true
+					});
+				});
+	} else if (forDate = forWeeklySuccessfullOrderReport) {
+		$("#orderReportsModal")
+				.load(
+						"/get-order-reports?forDate="
+								+ forWeeklySuccessfullOrderReport, function() {
+							$('#orderReportsModal').modal({
+								backdrop : 'static',
+								keyboard : true,
+								show : true
+							});
+						});
+	} else if (forDate = forWeeklyFailedOrderReport) {
+		$("#orderReportsModal").load(
+				"/get-order-reports?forDate=" + forWeeklyFailedOrderReport,
+				function() {
+					$('#orderReportsModal').modal({
+						backdrop : 'static',
+						keyboard : true,
+						show : true
+					});
+				});
+	} else {
+		alert("Warning,Sucpicious Activity Detected.");
+	}
+
+}
+
+function getMonthlyDetailsOfOrder() {
+	var forMonthlyTotalOrderReport = 1;
+	var forMonthlySuccessfullOrderReport = 1;
+	var forMonthlyFailedOrderReport = 1;
+
+}
+
+function saveYear(year) {
+	selectedYear = $(year).val();
+	console.log("Save year : year :- " + selectedYear);
+}
+
+// This function is called when user select month from order reports section
+function showMonthDetails(month) {
+	var selectedMonth = $(month).val();
+	if (selectedYear == -1) {
+		alert("Please select year from dropdown.");
+	} else if (selectedYear < 2015) {
+		alert("Warning,Suspicious Activity Detected.");
+	} else if (selectedYear > 2030) {
+		alert("Warning,Suspicious Activity Detected.");
+	} else {
+		console.log("Inside showMonthDetails(): Selected Month :- "
+				+ selectedMonth + " Selected Year : " + selectedYear);
+		if (selectedMonth > 0 && selectedMonth < 13) {
+			$("#monthlyReportDetails").load(
+					"/get-monthly-detail-of-order?selectedMonth="
+							+ selectedMonth + "&selectedYear=" + selectedYear,
+					function() {
+
+					});
+		} else {
+			alert("Warning,Suspicious Activity Detected.");
+		}
+	}
+
+}
 
 // this function is called when escape key is pressed it is used to set default
 // value of drop down(current status dropdown)

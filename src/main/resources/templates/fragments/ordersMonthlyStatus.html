@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<body>
+	<div>
+		<h3>Details</h3>
+		<strong>Total Orders: </strong><span id="totalMonthlyOrders"
+			th:text="${totalOrdersOfMonth}"> </span>
+		<button class="btn btn-sm btn-info"
+			function="getTotalOrderDetailsOfMonth();">Get Details</button>
+		<br> <strong>Successfull Orders: </strong><span
+			id="successMonthlyOrders" th:text="${successfullOrdersOfMonth}"
+			class="green"> </span>
+		<button class="btn btn-sm  btn-success"
+			function="getSuccessfullOrderDetailsOfMonth();">Get Details</button>
+		<br> <strong>Failed Orders: </strong><span
+			id="failedMonthlyOrders" th:text="${failedOrdersOfMonth}" class="red">
+		</span>
+		<button class="btn btn-sm btn-danger"
+			function="getFailedOrderDetailsOfMonth();">Get Details</button>
+		<br>
+	</div>
+</body>
+</html>

@@ -24,7 +24,7 @@ import com.ordernao.service.OrderService;
 import com.ordernao.utility.OrderNaoConstants;
 
 /**
- * @author vijay
+ * @author shubham sharma
  *
  */
 @Controller
@@ -32,18 +32,6 @@ public class OrderController {
 	static final Logger logger = LogManager.getLogger(OrderController.class.getName());
 	@Autowired
 	OrderService service;
-
-	/*
-	 * @RequestMapping(value = Constants.PATH_TRACK_DELIVERY_TABLE_HTML_PAGE)
-	 * public String TrackDeliveryDetails(HttpServletRequest request,
-	 * HttpServletResponse response) { logger.info("TrackDeliveryDetails");
-	 * return Constants.PATH_TRACK_DELIVERY_TABLE_PAGE; }
-	 * 
-	 * @RequestMapping(value = "trackDeliveryTable") public String
-	 * TrackDeliveryTable(HttpServletRequest request, HttpServletResponse
-	 * response) { logger.info("TrackDeliveryDetails"); return
-	 * "fragments/trackDeliveryTable"; }
-	 */
 
 	@RequestMapping(value = OrderNaoConstants.PATH_MORE_ORDER_DETAILS_HTML_PAGE)
 	public String moreDetails(HttpServletRequest request, HttpServletResponse response) {
@@ -863,4 +851,53 @@ public class OrderController {
 
 	}
 
+	@RequestMapping(value = OrderNaoConstants.PATH_REPORTS_HTML_PAGE)
+	public String orderReports(Model model) {
+		logger.info("Entry at orderReports()");
+		int totalOrdersOfCurrentDate = service.getTotalOrderCountOfCurrentDate();
+		int totalSuccessfullOfCurrentDate = service.getSuccessfullOrderCountOfCurrentDate();
+		int totalFailedOfCurrentDate = service.getFailedOrderCountOfCurrentDate();
+
+		int totalOrdersOfWeek = service.getTotalOrderCountOfWeek();
+		int totalSuccessfullOfWeek = service.getSuccessfullOrderCountOfWeek();
+		int totalFailedOfWeek = service.getFailedOrderCountOfWeek();
+
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_CURRENT_DATE_TOTAL_ORDERS, totalOrdersOfCurrentDate);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_CURRENT_DATE_SUCCESSFULL_ORDERS,
+				totalSuccessfullOfCurrentDate);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_CURRENT_DATE_FAILED_ORDERS, totalFailedOfCurrentDate);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_WEEK_TOTAL_ORDERS, totalOrdersOfWeek);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_WEEK_SUCCESSFULL_ORDERS, totalSuccessfullOfWeek);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_WEEK_FAILED_ORDERS, totalFailedOfWeek);
+		logger.info("Exit at orderReports()");
+		return OrderNaoConstants.PATH_REPORTS_PAGE;
+	}
+
+	@RequestMapping(value = OrderNaoConstants.PATH_MONTHLY_REPORT_OF_ORDER)
+	public String monthlyReportOfOrders(Model model, @RequestParam int selectedMonth,@RequestParam int selectedYear) {
+		logger.info("Entry at monthlyReportOfOrders()");
+		int totalOrdersOfMonth = service.getTotalOrderCountOfMonth(selectedMonth,selectedYear);
+		int totalSuccessfullOrdersOfMonth = service.getSuccessfullOrderCountOfMonth(selectedMonth,selectedYear);
+		int totalFailedOrdersOfMonth = service.getFailedOrderCountOfMonth(selectedMonth,selectedYear);
+
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_MONTH_TOTAL_ORDERS, totalOrdersOfMonth);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_MONTH_SUCCESSFULL_ORDERS, totalSuccessfullOrdersOfMonth);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_MONTH_FAILED_ORDERS, totalFailedOrdersOfMonth);
+		logger.info("Exit at monthlyReportOfOrders()");
+		return OrderNaoConstants.PATH_FRAGMENTS_ORDERS_MONTHLY_STATUS;
+	}
+	
+/*	@RequestMapping(value = OrderNaoConstants.PATH_GET_ORDER_REPORTS)
+	public String orderReports(Model model, @RequestParam int forDate) {
+		logger.info("Entry at orderReports()");
+		int totalOrdersOfMonth = service.getTotalOrderCountOfMonth(selectedMonth,selectedYear);
+		int totalSuccessfullOrdersOfMonth = service.getSuccessfullOrderCountOfMonth(selectedMonth,selectedYear);
+		int totalFailedOrdersOfMonth = service.getFailedOrderCountOfMonth(selectedMonth,selectedYear);
+
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_MONTH_TOTAL_ORDERS, totalOrdersOfMonth);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_MONTH_SUCCESSFULL_ORDERS, totalSuccessfullOrdersOfMonth);
+		model.addAttribute(OrderNaoConstants.MODEL_ATTRIBUTE_MONTH_FAILED_ORDERS, totalFailedOrdersOfMonth);
+		logger.info("Exit at orderReports()");
+		return OrderNaoConstants.PATH_FRAGMENTS_ORDERS_MONTHLY_STATUS;
+	}*/
 }

@@ -648,4 +648,113 @@ public class OrderService {
 		}
 		return deliveryBoyTripList;
 	}
+
+	public int getTotalOrderCountOfCurrentDate() {
+		logger.info("Entry at getTotalOrderCountOfCurrentDate()");
+		int totalOrderCountOfCurrentDate = 0;
+		try {
+			totalOrderCountOfCurrentDate = dao.getTotalOrderCountOfCurrentDate();
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getTotalOrderCountOfCurrentDate()");
+		return totalOrderCountOfCurrentDate;
+	}
+
+	public int getSuccessfullOrderCountOfCurrentDate() {
+		logger.info("Entry at getSuccessfullOrderCountOfCurrentDate()");
+		int successfullOrderCountOfCurrentDate = 0;
+		try {
+			successfullOrderCountOfCurrentDate = dao.getSuccessfullOrderCountOfCurrentDate();
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getSuccessfullOrderCountOfCurrentDate()");
+		return successfullOrderCountOfCurrentDate;
+	}
+
+	public int getFailedOrderCountOfCurrentDate() {
+		logger.info("Entry at getFailedOrderCountOfCurrentDate()");
+		int failedOrderCountOfCurrentDate = 0;
+		try {
+			failedOrderCountOfCurrentDate = dao.getFailedOrderCountOfCurrentDate();
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getFailedOrderCountOfCurrentDate()");
+		return failedOrderCountOfCurrentDate;
+	}
+
+	public int getTotalOrderCountOfWeek() {
+		logger.info("Entry at getTotalOrderCountOfWeek()");
+		int totalOrderCountOfWeek = 0;
+		try {
+			totalOrderCountOfWeek = dao.getTotalOrderCountOfWeek();
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getTotalOrderCountOfWeek()");
+		return totalOrderCountOfWeek;
+	}
+
+	public int getSuccessfullOrderCountOfWeek() {
+		logger.info("Entry at getSuccessfullOrderCountOfWeek()");
+		int successfullOrderCountOfWeek = 0;
+		try {
+			successfullOrderCountOfWeek = dao.getSuccessfullOrderCountOfWeek();
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getSuccessfullOrderCountOfWeek()");
+		return successfullOrderCountOfWeek;
+	}
+
+	public int getFailedOrderCountOfWeek() {
+		logger.info("Entry at getFailedOrderCountOfWeek()");
+		int failedOrderCountOfWeek = 0;
+		try {
+			failedOrderCountOfWeek = dao.getFailedOrderCountOfWeek();
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getFailedOrderCountOfWeek()");
+		return failedOrderCountOfWeek;
+	}
+
+	public int getTotalOrderCountOfMonth(int selectedMonth,int selectedYear) {
+		logger.info("Entry at getTotalOrderCountOfMonth()");
+		int totalOrderCountOfMonth = 0;
+		try {
+			totalOrderCountOfMonth = dao.getTotalOrderCountOfMonth(selectedMonth,selectedYear);
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getTotalOrderCountOfMonth()");
+		return totalOrderCountOfMonth;
+	}
+
+	public int getSuccessfullOrderCountOfMonth(int selectedMonth,int selectedYear) {
+		logger.info("Entry at getSuccessfullOrderCountOfMonth()");
+		int successfullOrderCountOfMonth = 0;
+		try {
+			successfullOrderCountOfMonth = dao.getSuccessfullOrderCountOfMonth(selectedMonth, selectedYear);
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getSuccessfullOrderCountOfMonth()");
+		return successfullOrderCountOfMonth;
+	}
+
+	public int getFailedOrderCountOfMonth(int selectedMonth,int selectedYear) {
+		logger.info("Entry at getFailedOrderCountOfMonth()");
+		int failedOrderCountOfMonth = 0;
+		try {
+			failedOrderCountOfMonth = dao.getFailedOrderCountOfMonth(selectedMonth,selectedYear);
+		} catch (Exception e) {
+			logger.error("Exception :- ", e);
+		}
+		logger.info("Exit at getFailedOrderCountOfMonth()");
+		return failedOrderCountOfMonth;
+	}
+
 }

@@ -674,4 +674,69 @@ public class OrderDao {
 		});
 	}
 
+	public int getTotalOrderCountOfCurrentDate() {
+		logger.info("Entry at getTotalOrderCountOfCurrentDate()");
+		String query = property.getProperty(OrderNaoConstants.GET_TOTAL_ORDER_COUNT_OF_CURRENT_DATE);
+		logger.info("Exit at getTotalOrderCountOfCurrentDate()");
+		return jdbcTemplate.queryForObject(query, Integer.class);
+	}
+
+	public int getSuccessfullOrderCountOfCurrentDate() {
+		logger.info("Entry at getSuccessfullOrderCountOfCurrentDate()");
+		String query = property.getProperty(OrderNaoConstants.GET_SUCCESSFULL_ORDER_COUNT_OF_CURRENT_DATE);
+		logger.info("Exit at getSuccessfullOrderCountOfCurrentDate()");
+		return jdbcTemplate.queryForObject(query, Integer.class);
+	}
+
+	public int getFailedOrderCountOfCurrentDate() {
+		logger.info("Entry at getFailedOrderCountOfCurrentDate()");
+		String query = property.getProperty(OrderNaoConstants.GET_FAILED_ORDER_COUNT_OF_CURRENT_DATE);
+		logger.info("Exit at getFailedOrderCountOfCurrentDate()");
+		return jdbcTemplate.queryForObject(query, Integer.class);
+	}
+
+	public int getTotalOrderCountOfWeek() {
+		logger.info("Entry at getTotalOrderCountOfWeek()");
+		String query = property.getProperty(OrderNaoConstants.GET_TOTAL_ORDER_COUNT_OF_WEEK);
+		logger.info("Exit at getTotalOrderCountOfWeek()");
+		return jdbcTemplate.queryForObject(query, Integer.class);
+	}
+
+	public int getSuccessfullOrderCountOfWeek() {
+		logger.info("Entry at getSuccessfullOrderCountOfWeek()");
+		String query = property.getProperty(OrderNaoConstants.GET_SUCCESSFULL_ORDER_COUNT_OF_WEEK);
+		logger.info("Exit at getSuccessfullOrderCountOfWeek()");
+		return jdbcTemplate.queryForObject(query, Integer.class);
+	}
+
+	public int getFailedOrderCountOfWeek() {
+		logger.info("Entry at getFailedOrderCountOfWeek()");
+		String query = property.getProperty(OrderNaoConstants.GET_FAILED_ORDER_COUNT_OF_WEEK);
+		logger.info("Exit at getFailedOrderCountOfWeek()");
+		return jdbcTemplate.queryForObject(query, Integer.class);
+	}
+
+	public int getTotalOrderCountOfMonth(int selectedMonth, int selectedYear) {
+		logger.info("Entry at getTotalOrderCountOfMonth()");
+		String query = property.getProperty(OrderNaoConstants.GET_TOTAL_ORDER_COUNT_OF_MONTH);
+		logger.info("Exit at getTotalOrderCountOfMonth()");
+		return jdbcTemplate.queryForObject(query, new Object[] { selectedMonth, selectedYear }, Integer.class);
+	}
+
+	public int getSuccessfullOrderCountOfMonth(int selectedMonth, int selectedYear) {
+		logger.info("Entry at getSuccessfullOrderCountOfMonth()");
+		String query = property.getProperty(OrderNaoConstants.GET_SUCCESSFULL_ORDER_COUNT_OF_MONTH);
+		logger.info("Exit at getSuccessfullOrderCountOfMonth()");
+		return jdbcTemplate.queryForObject(query, new Object[] { selectedMonth, selectedYear }, Integer.class);
+
+	}
+
+	public int getFailedOrderCountOfMonth(int selectedMonth, int selectedYear) {
+		logger.info("Entry at getFailedOrderCountOfMonth()");
+		String query = property.getProperty(OrderNaoConstants.GET_FAILED_ORDER_COUNT_OF_MONTH);
+		logger.info("Exit at getFailedOrderCountOfMonth()");
+		return jdbcTemplate.queryForObject(query, new Object[] { selectedMonth, selectedYear }, Integer.class);
+
+	}
+
 }
